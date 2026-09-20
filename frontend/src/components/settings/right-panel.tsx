@@ -14,7 +14,7 @@ export function RightPanel({
   children: ReactNode;
 }) {
   const router = useRouter();
-  const close = () => router.push("/");
+  const close = () => router.back();
 
   return (
     <div className="absolute inset-0 z-50 flex justify-end">
