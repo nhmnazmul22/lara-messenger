@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { MenuIcon, XIcon } from "lucide-react";
 
 import { BrandLogo } from "@/components/brand-logo";
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { activeChat, conversations } from "@/lib/mock-data";
 
-export function HomeShell() {
+export function HomeShell({ children }: { children?: ReactNode }) {
   const [conversationsOpen, setConversationsOpen] = useState(false);
 
   return (
@@ -74,6 +74,8 @@ export function HomeShell() {
               activeId={activeChat.id}
             />
           </aside>
+
+          {children}
         </div>
       </main>
     </div>
