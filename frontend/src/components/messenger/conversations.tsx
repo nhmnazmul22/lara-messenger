@@ -14,7 +14,7 @@ export function ConversationsList({
   activeId: string;
 }) {
   return (
-    <div className="flex min-h-0 flex-col">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden">
       <div className="flex h-14 shrink-0 items-center justify-between px-4">
         <h2 className="font-display text-base font-semibold tracking-tight">
           Messages
