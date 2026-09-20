@@ -86,7 +86,10 @@ export function Messages({
   return (
     <MessageScrollerProvider autoScroll>
       <MessageScroller className="flex-1">
-        <MessageScrollerViewport id="message-scroller-viewport">
+        <MessageScrollerViewport
+  id="message-scroller-viewport"
+  className="scrollbar-thumb-border scrollbar-track-transparent"
+>
           <MessageScrollerContent className="gap-6 px-3 py-4 sm:px-5">
             <Marker variant="separator" className="px-2">
               <MarkerContent>Today</MarkerContent>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -31,12 +32,16 @@ export function UserMenu() {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-56">
-        <DropdownMenuLabel className="flex flex-col gap-0.5 px-3.5 py-3">
-          <span className="text-sm font-semibold text-foreground">Nazmul Hasan</span>
-          <span className="text-xs font-normal text-muted-foreground">
-            nazmul@example.com
-          </span>
-        </DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="flex flex-col gap-0.5 px-3.5 py-3">
+            <span className="text-sm font-semibold text-foreground">
+              Nazmul Hasan
+            </span>
+            <span className="text-xs font-normal text-muted-foreground">
+              nazmul@example.com
+            </span>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <UserIcon />

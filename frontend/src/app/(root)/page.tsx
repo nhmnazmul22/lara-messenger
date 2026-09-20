@@ -6,8 +6,8 @@ import { activeChat, conversations } from "@/lib/mock-data";
 
 export default function Home() {
   return (
-    <div className="flex min-h-svh flex-col bg-muted/50">
-      <header className="mx-auto flex w-full max-w-[1600px] items-center justify-between px-4 py-3 sm:px-6">
+    <div className="flex h-svh flex-col overflow-hidden bg-muted/50">
+      <header className="mx-auto flex w-full max-w-[1600px] shrink-0 items-center justify-between px-4 py-3 sm:px-6">
         <BrandLogo />
         <UserMenu />
       </header>
