@@ -1,5 +1,4 @@
-import { MessagesSquareIcon } from "lucide-react";
-
+import { BrandLogo } from "@/components/brand-logo";
 import { cn } from "@/lib/utils";
 
 const thread = [
@@ -12,14 +11,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="grid min-h-svh lg:grid-cols-[1.05fr_1fr]">
       <aside className="relative hidden flex-col justify-between overflow-hidden bg-primary p-12 text-primary-foreground lg:flex">
-        <div className="flex items-center gap-2.5">
-          <span className="flex size-9 items-center justify-center rounded-2xl bg-primary-foreground/10 ring-1 ring-primary-foreground/15">
-            <MessagesSquareIcon className="size-4.5" strokeWidth={2} />
-          </span>
-          <span className="font-display text-lg font-semibold tracking-tight">
-            Lara Messenger
-          </span>
-        </div>
+        <BrandLogo tone="on-primary" />
 
         <div className="flex max-w-sm flex-col gap-3">
           {thread.map((message, index) => (
@@ -64,13 +56,8 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
 
       <main className="flex flex-col justify-center px-6 py-12 sm:px-10 lg:px-16">
         <div className="mx-auto flex w-full max-w-sm flex-col">
-          <div className="mb-10 flex items-center gap-2.5 lg:hidden">
-            <span className="flex size-9 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/15">
-              <MessagesSquareIcon className="size-4.5" strokeWidth={2} />
-            </span>
-            <span className="font-display text-lg font-semibold tracking-tight">
-              Lara Messenger
-            </span>
+          <div className="mb-10 flex lg:hidden">
+            <BrandLogo />
           </div>
 
           <div className="animate-in fade-in slide-in-from-bottom-4 fill-mode-both duration-700 ease-out">
