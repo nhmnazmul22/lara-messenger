@@ -1,3 +1,5 @@
-export default function Home() {
-  return null;
+import Home from "@/components/messenger/home";
+
+export default function HomePage() {
+  return <Home />;
 }

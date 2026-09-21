@@ -42,7 +42,7 @@ This dir is the `frontend` app of a monorepo; the Laravel API (and Reverb broadc
 ### Routing
 
 - App Router groups: `src/app/(auth)/` (login, register) and `src/app/(root)/` (main app). Put new pages in the matching group.
-- Profile/Settings drawers use **parallel routes**: `(root)/layout.tsx` consumes the `@panel` slot (`LayoutProps<"/"> & { panel: ReactNode }`) and renders `<HomeShell>{panel}</HomeShell>`; the real page files (`(root)/profile|settings/page.tsx`) are empty (`null`), while `@panel/profile|settings/page.tsx` hold the drawer UI. Close drawers with `router.back()`. Keep `@panel/page.tsx`, `@panel/[...catchAll]/page.tsx`, and `@panel/default.tsx` returning `null` so the slot closes on other routes.
+- Profile/Settings panels are **state-driven** (no dedicated routes): `HomeShell` (`src/components/messenger/home-shell.tsx`, client) holds `panel` state passed to `UserMenu`, and renders two shadcn `Sheet`-based `PanelSheet`s (`src/components/settings/panel-sheet.tsx`) with `open` derived from that state. Content lives in `src/components/settings/profile-form.tsx` and `settings-content.tsx`.
 - Import alias `@/*` → `src/*`.
 
 <!-- END:Project-agent-rules -->

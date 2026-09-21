@@ -7,12 +7,18 @@ import { BrandLogo } from "@/components/brand-logo";
 import { ChatWindow } from "@/components/messenger/chat-window";
 import { ConversationsList } from "@/components/messenger/conversations";
 import { UserMenu } from "@/components/messenger/user-menu";
+import { PanelSheet } from "@/components/settings/panel-sheet";
+import { ProfileForm } from "@/components/settings/profile-form";
+import { SettingsContent } from "@/components/settings/settings-content";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { activeChat, conversations } from "@/lib/mock-data";
 
-export function HomeShell({ children }: { children?: ReactNode }) {
+type PanelName = "profile" | "settings";
+
+function Home({ children }: { children?: ReactNode }) {
   const [conversationsOpen, setConversationsOpen] = useState(false);
+  const [panel, setPanel] = useState<PanelName | null>(null);
 
   return (
     <div className="flex h-svh flex-col overflow-hidden bg-muted/50">
@@ -33,7 +39,7 @@ export function HomeShell({ children }: { children?: ReactNode }) {
               </Button>
               <BrandLogo />
             </div>
-            <UserMenu />
+            <UserMenu onOpenPanel={setPanel} />
           </header>
 
           <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[340px_1fr]">
@@ -47,15 +53,15 @@ export function HomeShell({ children }: { children?: ReactNode }) {
           </div>
 
           <div
-              className={cn(
-                "absolute inset-0 z-30 bg-background/60 transition-[opacity,backdrop-filter] duration-500 ease-out lg:hidden",
-                conversationsOpen
-                  ? "pointer-events-auto opacity-100 backdrop-blur-sm"
-                  : "pointer-events-none opacity-0 backdrop-blur-0",
-              )}
-              onClick={() => setConversationsOpen(false)}
-              aria-hidden="true"
-            />
+            className={cn(
+              "absolute inset-0 z-30 bg-background/60 transition-[opacity,backdrop-filter] duration-500 ease-out lg:hidden",
+              conversationsOpen
+                ? "pointer-events-auto opacity-100 backdrop-blur-sm"
+                : "pointer-events-none opacity-0 backdrop-blur-0",
+            )}
+            onClick={() => setConversationsOpen(false)}
+            aria-hidden="true"
+          />
 
           <aside
             id="conversations-drawer"
@@ -76,8 +82,25 @@ export function HomeShell({ children }: { children?: ReactNode }) {
           </aside>
 
           {children}
+
+          <PanelSheet
+            title="Profile"
+            open={panel === "profile"}
+            onClose={() => setPanel(null)}
+          >
+            <ProfileForm />
+          </PanelSheet>
+          <PanelSheet
+            title="Settings"
+            open={panel === "settings"}
+            onClose={() => setPanel(null)}
+          >
+            <SettingsContent />
+          </PanelSheet>
         </div>
       </main>
     </div>
   );
 }
+
+export default Home;

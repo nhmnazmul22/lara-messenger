@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -15,7 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function UserMenu() {
+export function UserMenu({
+  onOpenPanel,
+}: {
+  onOpenPanel: (panel: "profile" | "settings") => void;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -44,11 +47,11 @@ export function UserMenu() {
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem render={<Link href="/profile" />}>
+        <DropdownMenuItem onClick={() => onOpenPanel("profile")}>
           <UserIcon />
           Profile
         </DropdownMenuItem>
-        <DropdownMenuItem render={<Link href="/settings" />}>
+        <DropdownMenuItem onClick={() => onOpenPanel("settings")}>
           <SettingsIcon />
           Settings
         </DropdownMenuItem>
