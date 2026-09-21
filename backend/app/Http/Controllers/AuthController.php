@@ -30,7 +30,7 @@ class AuthController extends Controller
         $result = $this->authServices->registerUser($request->validated());
 
         return $this->sendSuccessResponse(
-            'User Registration successful',
+            'User registration successful',
             new UserResource($result),
             Response::HTTP_CREATED
         );
