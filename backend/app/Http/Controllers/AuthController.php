@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthRequest\LoginRequest;
 use App\Http\Requests\AuthRequest\RegisterRequest;
 use App\Http\Resources\Users\UserResource;
 use App\Services\AuthServices;
@@ -16,9 +17,29 @@ class AuthController extends Controller
     /**
      * Login
      * Route: /api/auth/login
-     * @return void
+     * @return JsonResponse
      */
-    public function login() {}
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $token = $this->authServices->loginUser($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User login successful',
+            'data' => [
+                'token' => $token
+            ]
+        ],  Response::HTTP_OK)
+            ->cookie(
+                'auth_token',
+                $token,
+                60,
+                '/',
+                null,
+                app()->isProduction(),
+                true
+            );
+    }
 
     /**
      * Register
