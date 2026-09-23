@@ -67,6 +67,7 @@ class AuthTest extends TestCase
             'message' => 'User login successful',
         ]);
 
+        $this->assertNotNull(auth()->user());
         // Check JWT cookie
         $loginResponse->assertCookie('auth_token');
     }
@@ -85,6 +86,7 @@ class AuthTest extends TestCase
             'message' => 'User logout successful',
         ]);
 
+        $this->assertNull(auth()->user());
         // Check JWT cookie
         $logoutResponse->assertCookieExpired('auth_token');
     }
