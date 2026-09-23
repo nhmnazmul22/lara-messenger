@@ -1,61 +1,91 @@
 <?php
 
+namespace Tests\Feature\Auth;
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-uses(RefreshDatabase::class);
+class AuthTest extends TestCase
+{
+    use RefreshDatabase;
 
-test('user can register with proper request payload', function () {
-    $payload = [
-        'name' => 'test name',
-        'email' => 'test@gmail.com',
-        'password' => 'password123'
-    ];
+    public function test_user_can_register_with_proper_request_payload(): void
+    {
+        $payload = [
+            'name' => 'test name',
+            'email' => 'test@gmail.com',
+            'password' => 'password123',
+        ];
 
-    $response = $this->post(route('auth.register'), $payload);
+        $response = $this->post(
+            route('auth.register'),
+            $payload
+        );
 
+        $response->assertCreated();
 
-    $response->assertCreated();
-    $response->assertJson([
-        'success' => true,
-        'message' => 'User registration successful',
-    ]);
-    $this->assertDatabaseHas('users', [
-        'name' => 'test name',
-        'email' => 'test@gmail.com',
-    ]);
-});
+        $response->assertJson([
+            'success' => true,
+            'message' => 'User registration successful',
+        ]);
 
-test('user can register and login successfully', function () {
-    $payload = [
-        'name' => 'Test User',
-        'email' => 'test@gmail.com',
-        'password' => 'password123',
-    ];
+        $this->assertDatabaseHas('users', [
+            'name' => 'test name',
+            'email' => 'test@gmail.com',
+        ]);
+    }
 
-    // Register user
+    public function test_user_can_register_and_login_successfully(): void
+    {
+        $payload = [
+            'name' => 'Test User',
+            'email' => 'test@gmail.com',
+            'password' => 'password123',
+        ];
 
-    $registerResponse = $this->post(
-        route('auth.register'),
-        $payload
-    );
+        // Register user
+        $registerResponse = $this->post(
+            route('auth.register'),
+            $payload
+        );
 
-    $registerResponse->assertCreated();
+        $registerResponse->assertCreated();
 
-    // Login with registered credentials
-    $loginResponse = $this->post(
-        route('auth.login'),
-        [
-            'email' => $payload['email'],
-            'password' => $payload['password'],
-        ]
-    );
+        // Login with registered credentials
+        $loginResponse = $this->post(
+            route('auth.login'),
+            [
+                'email' => $payload['email'],
+                'password' => $payload['password'],
+            ]
+        );
 
-    $loginResponse->assertOk();
-    $loginResponse->assertJson([
-        'success' => true,
-        'message' => 'User login successful',
-    ]);
+        $loginResponse->assertOk();
 
-    // Check JWT cookie
-    $loginResponse->assertCookie('auth_token');
-});
+        $loginResponse->assertJson([
+            'success' => true,
+            'message' => 'User login successful',
+        ]);
+
+        // Check JWT cookie
+        $loginResponse->assertCookie('auth_token');
+    }
+
+    public function test_user_can_logout_successfully()
+    {
+        $this->test_user_can_register_and_login_successfully();
+
+        // Login with registered credentials
+        $logoutResponse = $this->post(route('auth.logout'));
+
+        $logoutResponse->assertOk();
+
+        $logoutResponse->assertJson([
+            'success' => true,
+            'message' => 'User logout successful',
+        ]);
+
+        // Check JWT cookie
+        $logoutResponse->assertCookieExpired('auth_token');
+    }
+}

@@ -60,7 +60,17 @@ class AuthController extends Controller
     /**
      * Logout
      * Route: /api/auth/logout
-     * @return void
+     * @return JsonResponse
      */
-    public function logout() {}
+    public function logout(): JsonResponse
+    {
+        auth()->logout();
+
+        return $this->sendSuccessResponse(
+            'User logout successful',
+            null,
+            Response::HTTP_OK
+        )
+            ->withCookie(cookie()->forget('auth_token'));
+    }
 }
