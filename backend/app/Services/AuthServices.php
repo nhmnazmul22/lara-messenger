@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\User;
 use App\Repository\UserRepository;
 use Exception;
+use Illuminate\Http\File;
+use Illuminate\Http\UploadedFile;
 
 class AuthServices
 {
@@ -12,9 +14,16 @@ class AuthServices
    public function __construct(protected UserRepository $userRepository) {}
 
 
-   public function registerUser(array $attributes): User
+   public function registerUser(array $attributes, ?UploadedFile $avatar = null): User
    {
-      return $this->userRepository->createUser($attributes);
+      if ($avatar) {
+         $avatarPath = $avatar->store('avatars', 'public');
+      }
+
+      return $this->userRepository->createUser([
+         ...$attributes,
+         'avatar' => $avatarPath ?? null
+      ]);
    }
 
    public function loginUser(array $credentials)

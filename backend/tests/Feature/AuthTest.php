@@ -2,12 +2,50 @@
 
 namespace Tests\Feature\Auth;
 
+use Faker\Core\File;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_user_can_register_with_avatar(): void
+    {
+
+        Storage::fake('public');
+
+        $avatar = UploadedFile::fake()->image('avatar.jpg', 300, 300);
+
+        $payload = [
+            'name' => 'test name',
+            'email' => 'test@gmail.com',
+            'password' => 'password123',
+            'avatar' => $avatar,
+        ];
+
+        $response = $this->post(
+            route('auth.register'),
+            $payload
+        );
+
+        $response->assertCreated();
+
+        $response->assertJson([
+            'success' => true,
+            'message' => 'User registration successful',
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'test name',
+            'email' => 'test@gmail.com',
+            'avatar' => 'avatars/' . $avatar->hashName(),
+        ]);
+
+        Storage::disk('public')->assertExists('avatars/' . $avatar->hashName());
+    }
 
     public function test_user_can_register_with_proper_request_payload(): void
     {
@@ -34,6 +72,7 @@ class AuthTest extends TestCase
             'email' => 'test@gmail.com',
         ]);
     }
+
 
     public function test_user_can_register_and_login_successfully(): void
     {
