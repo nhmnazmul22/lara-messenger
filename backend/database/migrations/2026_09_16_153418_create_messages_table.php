@@ -38,6 +38,16 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('groups', function (Blueprint $table) {
+            $table->dropForeign(['last_message_id']);
+            $table->dropColumn('last_message_id');
+        });
+
+        Schema::table('conversations', function (Blueprint $table) {
+            $table->dropForeign(['last_message_id']);
+            $table->dropColumn('last_message_id');
+        });
+
         Schema::dropIfExists('messages');
     }
 };
