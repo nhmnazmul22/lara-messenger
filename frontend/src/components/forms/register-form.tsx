@@ -13,18 +13,19 @@ import { Camera } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { toast } from "@/components/ui/toast";
 import Image from "next/image";
-import { FromDataType } from "@/types/auth";
+import { RegistrationDataType } from "@/types/auth";
 import { registerUser } from "@/services/auth";
+import { useRouter } from "next/navigation";
 
-const initialFromData: FromDataType = {
+const initialFromData: RegistrationDataType = {
   name: "",
   email: "",
   password: "",
   isPrivacyAgreed: false,
 };
 
-const handleValidation = (data: FromDataType) => {
-  const errors: Partial<Record<keyof FromDataType, string>> = {};
+const handleValidation = (data: RegistrationDataType) => {
+  const errors: Partial<Record<keyof RegistrationDataType, string>> = {};
   if (!data.name.trim()) {
     errors["name"] = "Name is required";
   }
@@ -50,12 +51,14 @@ const handleValidation = (data: FromDataType) => {
 };
 
 const RegisterForm = () => {
-  const [formData, setFormData] = useState<FromDataType>(initialFromData);
+  const [formData, setFormData] =
+    useState<RegistrationDataType>(initialFromData);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleFromDataChange = (
-    key: keyof FromDataType,
+    key: keyof RegistrationDataType,
     value: string | boolean,
   ) => {
     setFormData((prev) => ({
@@ -114,6 +117,7 @@ const RegisterForm = () => {
         type: "success",
         description: result.message,
       });
+      router.push("/login");
     } finally {
       setIsSubmitting(false);
     }

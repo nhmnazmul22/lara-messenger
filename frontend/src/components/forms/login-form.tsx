@@ -1,13 +1,94 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { LoginDataType } from "@/types/auth";
+import { toast } from "@/components/ui/toast";
+import { loginUser } from "@/services/auth";
+import { useRouter } from "next/navigation";
+
+const initialFromData: LoginDataType = {
+  email: "",
+  password: "",
+};
+
+const handleValidation = (data: LoginDataType) => {
+  const errors: Partial<Record<keyof LoginDataType, string>> = {};
+  if (!data.email) {
+    errors["email"] = "Email is required";
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (data.email && !emailRegex.test(data.email)) {
+    errors["email"] = "Email is invalid";
+  }
+
+  if (!data.password || data.password.length < 8) {
+    errors["password"] = "A valid password is required";
+  }
+
+  return Object.keys(errors).length > 0 ? errors : null;
+};
 
 const LoginForm = () => {
+  const [formData, setFormData] = useState<LoginDataType>(initialFromData);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const router = useRouter();
+
+  const handleFromDataChange = (
+    key: keyof LoginDataType,
+    value: string | boolean,
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    setIsSubmitting(true);
+    e.preventDefault();
+    try {
+      const errors = handleValidation(formData);
+
+      if (errors) {
+        const message = Object.values(errors)
+          .map((error) => `• ${error}`)
+          .join("\n");
+
+        toast.add({
+          type: "error",
+          description: message,
+        });
+
+        return;
+      }
+
+      const result = await loginUser(formData);
+
+      if (!result.success) {
+        toast.add({
+          type: "error",
+          description: result.message,
+        });
+        return;
+      }
+
+      toast.add({
+        type: "success",
+        description: result.message,
+      });
+      router.push("/");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <FieldGroup className="gap-5">
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -16,6 +97,8 @@ const LoginForm = () => {
             type="email"
             placeholder="you@example.com"
             autoComplete="email"
+            value={formData.email}
+            onChange={(e) => handleFromDataChange("email", e.target.value)}
           />
         </Field>
 
@@ -34,19 +117,19 @@ const LoginForm = () => {
             type="password"
             placeholder="••••••••"
             autoComplete="current-password"
+            value={formData.password}
+            onChange={(e) => handleFromDataChange("password", e.target.value)}
           />
-        </Field>
-
-        <Field orientation="horizontal">
-          <Checkbox id="remember" />
-          <FieldLabel htmlFor="remember" className="font-normal">
-            Keep me signed in
-          </FieldLabel>
         </Field>
       </FieldGroup>
 
-      <Button type="button" size="lg" className="mt-6 w-full">
-        Sign in
+      <Button
+        disabled={isSubmitting}
+        type="submit"
+        size="lg"
+        className="mt-6 w-full"
+      >
+        {isSubmitting ? "Sign in..." : "Sign in"}
       </Button>
     </form>
   );
