@@ -94,7 +94,13 @@ const RegisterForm = () => {
         return;
       }
 
-      const result = await registerUser(formData);
+      // Generate formData
+      const formDataPayload = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        formDataPayload.append(key, value);
+      });
+
+      const result = await registerUser(formDataPayload);
 
       if (!result.success) {
         toast.add({

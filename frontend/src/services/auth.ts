@@ -1,23 +1,24 @@
-import { FromDataType } from "@/types/auth";
+import { json } from "stream/consumers";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://127.0.0.1:8000/api";
 
-export const registerUser = async (data: FromDataType) => {
+export const registerUser = async (data: FormData) => {
   try {
     const response = await fetch(`${BASE_URL}/auth/register`, {
       method: "POST",
-      body: JSON.stringify(data),
+      body: data,
       headers: {
-      //   "Content-type": "application/json",
+        // "Content-type": "multipart/form-data",
         Accept: "application/json",
       },
     });
 
-    if (!response.ok) {
-      throw new Error("Registration filed");
-    }
     const result = await response.json();
+
+    if (!result?.success) {
+      throw new Error(result?.message || "Registration filed");
+    }
 
     return {
       success: true,
