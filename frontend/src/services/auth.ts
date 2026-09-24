@@ -41,6 +41,7 @@ export const loginUser = async (data: LoginDataType) => {
         "Content-type": "application/json",
         Accept: "application/json",
       },
+      credentials: "include",
     });
 
     const result = await response.json();
