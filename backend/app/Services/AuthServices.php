@@ -22,7 +22,7 @@ class AuthServices
 
       return $this->userRepository->createUser([
          ...$attributes,
-         'avatar' => $avatarPath ?? null
+         'avatar' =>  isset($avatarPath) ? '/storage' . $avatarPath : null
       ]);
    }
 
