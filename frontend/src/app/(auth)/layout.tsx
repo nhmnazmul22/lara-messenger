@@ -1,4 +1,4 @@
-import { BrandLogo } from "@/components/brand-logo";
+import { BrandLogo } from "@/components/common/brand-logo";
 import { cn } from "@/lib/utils";
 
 const thread = [
