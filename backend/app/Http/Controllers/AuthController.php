@@ -33,11 +33,11 @@ class AuthController extends Controller
             ->cookie(
                 'auth_token',
                 $token,
-                60,
+                10080,
                 '/',
                 null,
                 app()->isProduction(),
-                true
+                true,
             );
     }
 
