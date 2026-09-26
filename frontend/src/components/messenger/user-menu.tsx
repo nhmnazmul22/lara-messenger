@@ -19,6 +19,10 @@ export function UserMenu({
 }: {
   onOpenPanel: (panel: "profile" | "settings") => void;
 }) {
+
+
+
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger

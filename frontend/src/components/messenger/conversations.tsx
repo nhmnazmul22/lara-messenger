@@ -1,8 +1,6 @@
-import { ListFilterIcon } from "lucide-react";
 
 import { Avatar, AvatarBadge, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Conversation } from "@/lib/mock-data";
 
@@ -19,14 +17,6 @@ export function ConversationsList({
         <h2 className="font-display text-base font-semibold tracking-tight">
           Messages
         </h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-xl text-muted-foreground"
-          aria-label="Filter conversations"
-        >
-          <ListFilterIcon />
-        </Button>
       </div>
 
       <nav
