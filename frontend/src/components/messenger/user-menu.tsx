@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
+import { Loader2, LogOutIcon, SettingsIcon, UserIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,15 +13,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 
 export function UserMenu({
   onOpenPanel,
 }: {
   onOpenPanel: (panel: "profile" | "settings") => void;
 }) {
-
-
-
+  const { profile, logoutUser, isLoggingOut } = useAuth();
 
   return (
     <DropdownMenu>
@@ -43,10 +42,10 @@ export function UserMenu({
         <DropdownMenuGroup>
           <DropdownMenuLabel className="flex flex-col gap-0.5 px-3.5 py-3">
             <span className="text-sm font-semibold text-foreground">
-              Nazmul Hasan
+              {profile?.name ?? "Loading..."}
             </span>
             <span className="text-xs font-normal text-muted-foreground">
-              nazmul@example.com
+              {profile?.email ?? "Loading..."}
             </span>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
@@ -60,8 +59,12 @@ export function UserMenu({
           Settings
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem variant="destructive">
-          <LogOutIcon />
+        <DropdownMenuItem variant="destructive" onClick={logoutUser}>
+          {isLoggingOut ? (
+            <Loader2 className="animate-spin " />
+          ) : (
+            <LogOutIcon />
+          )}
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

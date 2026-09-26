@@ -3,7 +3,7 @@
 import { toast } from "@/components/ui/toast";
 import { logout, myProfile } from "@/services/auth";
 import { User } from "@/types/user";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   Dispatch,
