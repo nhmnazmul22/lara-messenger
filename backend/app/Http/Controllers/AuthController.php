@@ -72,6 +72,21 @@ class AuthController extends Controller
             null,
             Response::HTTP_OK
         )
-            ->withCookie(cookie()->forget('auth_token'));
+            ->withoutCookie('auth_token');
+    }
+
+    /**
+     * Me / Auth user profile
+     * Route: /api/auth/me
+     * @return JsonResponse
+     */
+
+    public function me(): JsonResponse
+    {
+        return $this->sendSuccessResponse(
+            'User logout successful',
+            new UserResource(auth()->user()),
+            Response::HTTP_OK
+        );
     }
 }
