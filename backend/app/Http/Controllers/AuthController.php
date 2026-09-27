@@ -74,7 +74,6 @@ class AuthController extends Controller
                 'data' => null,
             ],
             Response::HTTP_OK
-
         )
             ->withoutCookie('auth_token', '/');
     }

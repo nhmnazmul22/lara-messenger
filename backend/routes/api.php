@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->as('auth.')->group(function () {
@@ -13,4 +14,6 @@ Route::prefix('auth')->as('auth.')->group(function () {
     });
 });
 
-Route::middleware('auth:api')->group(function () {});
+Route::middleware('auth:api')->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+});
