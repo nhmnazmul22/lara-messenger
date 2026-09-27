@@ -67,12 +67,16 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return $this->sendSuccessResponse(
-            'User logout successful',
-            null,
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'User logout successful',
+                'data' => null,
+            ],
             Response::HTTP_OK
+
         )
-            ->withoutCookie('auth_token');
+            ->withoutCookie('auth_token', '/');
     }
 
     /**

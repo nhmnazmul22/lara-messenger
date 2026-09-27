@@ -1,5 +1,6 @@
 import { LoginDataType } from "@/types/auth";
 import { User } from "@/types/user";
+import { getAuthToken, removeToken, setToken } from "@/utils/token";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api";
@@ -51,6 +52,9 @@ export const loginUser = async (data: LoginDataType) => {
       throw new Error(result?.message || "Login filed");
     }
 
+    // Set the token to localstorage
+    setToken(result?.data?.token);
+
     return {
       success: true,
       message: result?.message ?? "Login successful",
@@ -70,7 +74,9 @@ export const logout = async () => {
       headers: {
         "Content-type": "application/json",
         Accept: "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
       },
+      credentials: "include",
     });
 
     const result = await response.json();
@@ -78,6 +84,9 @@ export const logout = async () => {
     if (!result?.success) {
       throw new Error(result?.message || "Logout filed");
     }
+
+    // Remove token from the localStorage
+    // removeToken();
 
     return {
       success: true,
@@ -98,8 +107,8 @@ export const myProfile = async () => {
       headers: {
         "Content-type": "application/json",
         Accept: "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
       },
-      credentials: "include",
     });
 
     const result = await response.json();
