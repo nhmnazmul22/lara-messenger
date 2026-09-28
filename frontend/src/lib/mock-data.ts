@@ -8,6 +8,14 @@ export type Conversation = {
   online?: boolean;
 };
 
+export type User = {
+  id: string;
+  name: string;
+  initials: string;
+  about: string;
+  online?: boolean;
+};
+
 export type TextMessage = {
   kind: "text";
   id: string;
@@ -88,6 +96,72 @@ export const conversations: Conversation[] = [
     initials: "BC",
     preview: "I finished the last chapter!",
     time: "Tuesday",
+  },
+];
+
+export const users: User[] = [
+  {
+    id: "maya",
+    name: "Maya Reyes",
+    initials: "MR",
+    about: "Active now",
+    online: true,
+  },
+  {
+    id: "alex",
+    name: "Alex Chen",
+    initials: "AC",
+    about: "Active now",
+    online: true,
+  },
+  {
+    id: "nadia",
+    name: "Nadia Okoye",
+    initials: "NO",
+    about: "Active now",
+    online: true,
+  },
+  {
+    id: "sam",
+    name: "Sam Whitfield",
+    initials: "SW",
+    about: "Last seen 12 minutes ago",
+  },
+  {
+    id: "priya",
+    name: "Priya Raman",
+    initials: "PR",
+    about: "Last seen 1 hour ago",
+  },
+  {
+    id: "tomas",
+    name: "Tomás Lindqvist",
+    initials: "TL",
+    about: "Last seen 3 hours ago",
+  },
+  {
+    id: "june",
+    name: "June Park",
+    initials: "JP",
+    about: "Last seen yesterday",
+  },
+  {
+    id: "dario",
+    name: "Dario Ferraro",
+    initials: "DF",
+    about: "Last seen yesterday",
+  },
+  {
+    id: "hana",
+    name: "Hana Sato",
+    initials: "HS",
+    about: "Last seen Monday",
+  },
+  {
+    id: "olu",
+    name: "Olu Adeyemi",
+    initials: "OA",
+    about: "Last seen Tuesday",
   },
 ];
 

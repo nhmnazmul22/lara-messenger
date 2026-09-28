@@ -2,8 +2,8 @@
 
 import { useConversation } from "@/contexts/ConversationContext";
 import { cn } from "@/lib/utils";
-import { ConversationsList } from "../messenger/conversations";
-import { activeChat, conversations } from "@/lib/mock-data";
+import { SidebarLists } from "../messenger/sidebar-lists";
+import { activeChat, conversations, users } from "@/lib/mock-data";
 
 const Sidebar = () => {
   const { conversationsOpen } = useConversation();
@@ -20,8 +20,9 @@ const Sidebar = () => {
           : "pointer-events-none -translate-x-full",
       )}
     >
-      <ConversationsList
+      <SidebarLists
         conversations={conversations}
+        users={users}
         activeId={activeChat.id}
       />
     </aside>
