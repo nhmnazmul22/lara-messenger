@@ -11,16 +11,24 @@ class ConversationRepository
    public function __construct(protected Conversation $model) {}
 
 
-   public function createUser(array $attributes): Conversation
-   {
-      return $this->model->create($attributes);
-   }
-
    public function findUserConversations(int $userId): Collection
    {
       return $this->model
          ->where('user_id1', $userId)
          ->orWhere('user_id2', $userId)
          ->get();
+   }
+
+   public function findConversation(int $receiverId): ?Conversation
+   {
+      return $this->model
+         ->where('user_id1', auth()->id())
+         ->where('user_id2', $receiverId)
+         ->first();
+   }
+
+   public function createConversation(array $attributes): Conversation
+   {
+      return $this->model->create($attributes);
    }
 }
