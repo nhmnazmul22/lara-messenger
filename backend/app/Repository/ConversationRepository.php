@@ -31,4 +31,23 @@ class ConversationRepository
    {
       return $this->model->create($attributes);
    }
+
+    public function hasParticipants(
+        int $conversationId,
+        int $senderId,
+        int $receiverId
+    ): bool {
+        return $this->model
+                ->where('id', $conversationId)
+                ->where(function ($query) use ($senderId, $receiverId) {
+                    $query->where(function ($query) use ($senderId, $receiverId) {
+                        $query->where('user_id1', $senderId)
+                            ->where('user_id2', $receiverId);
+                    })->orWhere(function ($query) use ($senderId, $receiverId) {
+                        $query->where('user_id1', $receiverId)
+                            ->where('user_id2', $senderId);
+                    });
+                })
+                ->exists();
+    }
 }

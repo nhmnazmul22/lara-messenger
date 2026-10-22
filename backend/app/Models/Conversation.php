@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @method where(string $string, int $conversationId)
+ * @method create(array $attributes)
+ */
 class Conversation extends Model
 {
     protected $fillable = [
