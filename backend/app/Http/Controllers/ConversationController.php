@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Conversation\ConversationStoreRequest;
 use App\Http\Resources\Conversation\ConversationResource;
 use App\Services\ConversationService;
 use Illuminate\Http\JsonResponse;
