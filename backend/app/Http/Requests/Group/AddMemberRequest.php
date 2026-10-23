@@ -29,6 +29,8 @@ class AddMemberRequest extends FormRequest
                 'int',
                 'exists:users,id',
                 Rule::notIn([auth()->id()]),
+                Rule::unique('group_users', 'user_id')
+                    ->where('group_id', $this->route('group')->id),
             ],
         ];
     }
@@ -41,6 +43,7 @@ class AddMemberRequest extends FormRequest
             'usersIds.*.int' => 'Each group user ID must be an integer.',
             'usersIds.*.exists' => 'One or more selected users do not exist.',
             'usersIds.*.not_in' => 'You cannot be added yourself as a group member.',
+            'usersIds.*.unique' => 'This user is already a member of the group.',
         ];
     }
 
