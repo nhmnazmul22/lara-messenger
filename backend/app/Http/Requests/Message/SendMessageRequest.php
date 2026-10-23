@@ -36,7 +36,7 @@ class SendMessageRequest extends FormRequest
                 ),
             ],
             'groupId' => ['required_without:conversationId','int', 'exists:groups,id'],
-            'message' => ['required', 'string',],
+            'message' => ['nullable', 'string',],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => [
                 'file',
