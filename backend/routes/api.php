@@ -28,7 +28,13 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/send', [MessageController::class, 'sendMessage'])->name('send');
     });
 
-    Route::apiResource('groups', GroupController::class);
+    Route::prefix('/groups')->as('.groups')->group(function () {
+        Route::apiResource('/', GroupController::class)
+            ->only(['index', 'store', 'show', 'destroy']);
+
+        Route::patch('/add-member/{group}', [GroupController::class, 'addMember'])
+            ->name('add-member');
+    });
 
 
 });
