@@ -17,4 +17,9 @@ class GroupRepository
         return $this->model->all();
     }
 
+    public function createGroup(array $attributes)
+    {
+        return $this->model->create($attributes);
+    }
+
 }

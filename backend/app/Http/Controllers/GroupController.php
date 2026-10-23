@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Group\GroupStoreRequest;
 use App\Http\Resources\Group\GroupResource;
+use App\Http\Resources\Group\MinifiedGroupResource;
 use App\Services\GroupService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class GroupController extends Controller
 {
@@ -17,7 +20,18 @@ class GroupController extends Controller
     {
         return $this->sendSuccessResponse(
             'Groups retrieved successful',
-            GroupResource::collection($this->service->groupCollection())
+            MinifiedGroupResource::collection($this->service->groupCollection())
+        );
+    }
+
+    public function store(GroupStoreRequest $request)
+    {
+        $result = $this->service->createNewGroup($request->validated());
+
+        return $this->sendSuccessResponse(
+            'Group created successfully',
+            new GroupResource($result),
+            Response::HTTP_CREATED
         );
     }
 }
