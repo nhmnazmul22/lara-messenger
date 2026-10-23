@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -23,8 +24,11 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/conversations/{receiverId}', [ConversationController::class, 'getConversation'])
         ->name('conversation.getConversation');
 
-    Route::prefix('/messages')->as('.messages')->group(function (){
+    Route::prefix('/messages')->as('.messages')->group(function () {
         Route::post('/send', [MessageController::class, 'sendMessage'])->name('send');
     });
+
+    Route::apiResource('groups', GroupController::class);
+
 
 });
