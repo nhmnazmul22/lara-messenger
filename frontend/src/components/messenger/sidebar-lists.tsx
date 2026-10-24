@@ -1,27 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { MessageSquareIcon, UsersIcon } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ConversationsList } from "./conversations";
 import { UsersList } from "./users";
-import type { Conversation, User } from "@/lib/mock-data";
+import type { Conversation } from "@/lib/mock-data";
+import {User} from "@/types/user";
+import {getUsers} from "@/services/users";
 
 const iconTransition =
   "absolute transition-opacity transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)]";
 
 export function SidebarLists({
   conversations,
-  users,
   activeId,
 }: {
   conversations: Conversation[];
-  users: User[];
   activeId: string;
 }) {
   const [showUsers, setShowUsers] = useState(false);
+  const [users, setUsers] = useState<User[] | []>([]);
+
+
+  useEffect(()=>{
+    (async ()=>{
+      const result = await getUsers();
+
+      if(result.success){
+        setUsers(result.data as User[])
+      }
+
+    })()
+  }, [])
+
+
+
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">
@@ -32,7 +47,7 @@ export function SidebarLists({
           </h2>
           <p className="truncate text-xs text-muted-foreground">
             {showUsers
-              ? `${users.length} contacts`
+              ? `${users?.length} contacts`
               : `${conversations.length} conversations`}
           </p>
         </div>

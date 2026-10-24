@@ -22,7 +22,6 @@ const Sidebar = () => {
     >
       <SidebarLists
         conversations={conversations}
-        users={users}
         activeId={activeChat.id}
       />
     </aside>
