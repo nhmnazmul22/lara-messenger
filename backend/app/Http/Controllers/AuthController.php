@@ -6,18 +6,23 @@ use App\Http\Requests\AuthRequest\LoginRequest;
 use App\Http\Requests\AuthRequest\RegisterRequest;
 use App\Http\Resources\Users\UserResource;
 use App\Services\AuthServices;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
 
-    public function __construct(protected AuthServices $authServices) {}
+    public function __construct(protected AuthServices $authServices)
+    {
+    }
 
     /**
      * Login
      * Route: /api/auth/login
+     * @param LoginRequest $request
      * @return JsonResponse
+     * @throws Exception
      */
     public function login(LoginRequest $request): JsonResponse
     {
@@ -29,7 +34,7 @@ class AuthController extends Controller
             'data' => [
                 'token' => $token
             ]
-        ],  Response::HTTP_OK)
+        ], Response::HTTP_OK)
             ->cookie(
                 'auth_token',
                 $token,
@@ -44,6 +49,7 @@ class AuthController extends Controller
     /**
      * Register
      * Route: /api/auth/register
+     * @param RegisterRequest $request
      * @return JsonResponse
      */
     public function register(RegisterRequest $request): JsonResponse
