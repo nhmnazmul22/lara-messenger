@@ -38,7 +38,7 @@ class AuthController extends Controller
             ->cookie(
                 'auth_token',
                 $token,
-                10080,
+                (int)config('jwt.ttl'),
                 '/',
                 null,
                 app()->isProduction(),
