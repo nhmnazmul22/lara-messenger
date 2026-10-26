@@ -1,6 +1,6 @@
-import { LoginDataType } from "@/types/auth";
-import { User } from "@/types/user";
-import { getAuthToken, removeToken, setToken } from "@/utils/token";
+import {LoginDataType} from "@/types/auth";
+import {User} from "@/types/user";
+import {getAuthToken, setToken} from "@/utils/token";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api";

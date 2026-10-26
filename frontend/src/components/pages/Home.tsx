@@ -1,16 +1,10 @@
-"use client";
-
-import { PanelSheet } from "@/components/settings/panel-sheet";
-import { ProfileForm } from "@/components/settings/profile-form";
-import { SettingsContent } from "@/components/settings/settings-content";
 import Navbar from "@/components/Layout/Navbar";
-import { usePanel } from "@/contexts/PanelContext";
 import BlurEffect from "../common/BlurEffect";
 import MobileView from "../Layout/MobileView";
 import Sidebar from "../Layout/Sidebar";
+import Panels from "@/components/common/Panels";
 
 function Home() {
-  const { panel, setPanel } = usePanel();
 
   return (
     <div className="flex h-svh flex-col overflow-hidden bg-muted/50">
@@ -19,22 +13,8 @@ function Home() {
           <Navbar />
           <MobileView />
           <BlurEffect />
-
           <Sidebar />
-          <PanelSheet
-            title="Profile"
-            open={panel === "profile"}
-            onClose={() => setPanel(null)}
-          >
-            <ProfileForm />
-          </PanelSheet>
-          <PanelSheet
-            title="Settings"
-            open={panel === "settings"}
-            onClose={() => setPanel(null)}
-          >
-            <SettingsContent />
-          </PanelSheet>
+          <Panels/>
         </div>
       </main>
     </div>
