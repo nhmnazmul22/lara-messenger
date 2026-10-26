@@ -2,23 +2,35 @@ import { ConversationStore } from "@/types/conversation";
 import { create } from "zustand";
 
 const useConversation = create<ConversationStore>((set) => ({
-  loading: null,
+  startingConversation: null,
+  loading: false,
   error: null,
   conversation: null,
+  conversations: [],
 
-  setConversation: (conversation) => {
-    set({
-      conversation: conversation,
-    });
-  },
   setLoading: (loading) => {
     set({
       loading,
     });
   },
-  setError: (message) => {
+  setStartingConversation: (conversationId) => {
     set({
-      error: message,
+      startingConversation: conversationId,
+    });
+  },
+  setError: (error) => {
+    set({
+      error,
+    });
+  },
+  setConversation: (conversation) => {
+    set({
+      conversation,
+    });
+  },
+  setConversations: (conversations) => {
+    set({
+      conversations,
     });
   },
 }));

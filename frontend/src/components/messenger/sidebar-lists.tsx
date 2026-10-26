@@ -1,14 +1,13 @@
 "use client";
 
-import {useEffect, useState} from "react";
 import { MessageSquareIcon, UsersIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ConversationsList } from "./conversations";
 import { UsersList } from "./users";
 import type { Conversation } from "@/lib/mock-data";
-import {User} from "@/types/user";
-import {getUsers} from "@/services/users";
+import { useSidebar } from "@/contexts/SidebarContext";
+import useUser from "@/store/useUser";
 
 const iconTransition =
   "absolute transition-opacity transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)]";
@@ -20,22 +19,8 @@ export function SidebarLists({
   conversations: Conversation[];
   activeId: string;
 }) {
-  const [showUsers, setShowUsers] = useState(false);
-  const [users, setUsers] = useState<User[] | []>([]);
-
-
-  useEffect(()=>{
-    (async ()=>{
-      const result = await getUsers();
-
-      if(result.success){
-        setUsers(result.data as User[])
-      }
-
-    })()
-  }, [])
-
-
+  const { showUsers, setShowUsers } = useSidebar();
+  const users = useUser((state) => state.users);
 
 
   return (
@@ -64,18 +49,14 @@ export function SidebarLists({
               aria-hidden
               className={cn(
                 iconTransition,
-                showUsers
-                  ? "scale-85 opacity-0"
-                  : "scale-100 opacity-100",
+                showUsers ? "scale-85 opacity-0" : "scale-100 opacity-100",
               )}
             />
             <UsersIcon
               aria-hidden
               className={cn(
                 iconTransition,
-                showUsers
-                  ? "scale-100 opacity-100"
-                  : "scale-85 opacity-0",
+                showUsers ? "scale-100 opacity-100" : "scale-85 opacity-0",
               )}
             />
           </span>
@@ -87,7 +68,7 @@ export function SidebarLists({
         className="flex min-h-0 flex-1 flex-col animate-in fade-in-0 duration-200"
       >
         {showUsers ? (
-          <UsersList users={users} />
+          <UsersList />
         ) : (
           <ConversationsList
             conversations={conversations}

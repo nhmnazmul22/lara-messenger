@@ -10,11 +10,15 @@ export type conversation = {
 };
 
 export interface ConversationStore {
-  loading: number | null;
+  startingConversation: number | null;
+  loading: boolean;
   error: string | null;
   conversation: conversation | null;
+  conversations: conversation[] | [];
 
+  setStartingConversation: (conversationId: number | null) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
   setConversation: (conversation: conversation) => void;
-  setLoading: (loading: number | null) => void;
-  setError: (message: string | null) => void;
+  setConversations: (conversations: conversation[]) => void;
 }
