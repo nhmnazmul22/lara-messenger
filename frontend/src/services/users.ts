@@ -1,12 +1,11 @@
 import {getAuthToken} from "@/utils/token";
 import {User} from "@/types/user";
+import appConfig from "@/config/app";
 
-const BASE_URL =
-    process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api";
 
 export const getUsers = async () => {
     try {
-        const response = await fetch(`${BASE_URL}/users`, {
+        const response = await fetch(`${appConfig.BASE_URL}/users`, {
             method: "GET",
             headers: {
                 "Content-type": "application/json",

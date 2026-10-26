@@ -1,13 +1,12 @@
 import {LoginDataType} from "@/types/auth";
 import {User} from "@/types/user";
 import {getAuthToken, setToken} from "@/utils/token";
+import appConfig from "@/config/app";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000/api";
 
 export const registerUser = async (data: FormData) => {
   try {
-    const response = await fetch(`${BASE_URL}/auth/register`, {
+    const response = await fetch(`${appConfig.BASE_URL}/auth/register`, {
       method: "POST",
       body: data,
       headers: {
@@ -36,7 +35,7 @@ export const registerUser = async (data: FormData) => {
 
 export const loginUser = async (data: LoginDataType) => {
   try {
-    const response = await fetch(`${BASE_URL}/auth/login`, {
+    const response = await fetch(`${appConfig.BASE_URL}/auth/login`, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -69,7 +68,7 @@ export const loginUser = async (data: LoginDataType) => {
 
 export const logout = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/auth/logout`, {
+    const response = await fetch(`${appConfig.BASE_URL}/auth/logout`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -102,7 +101,7 @@ export const logout = async () => {
 
 export const myProfile = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/auth/me`, {
+    const response = await fetch(`${appConfig.BASE_URL}/auth/me`, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
