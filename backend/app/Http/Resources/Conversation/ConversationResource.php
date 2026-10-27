@@ -19,6 +19,7 @@ class ConversationResource extends JsonResource
             'sender' => $this->resource->userOne,
             'receiver' => $this->resource->userTwo,
             'last_message_id' => $this->resource->last_message_id,
+            'message' => $this->whenLoaded('messages', $this->resource->messages),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];

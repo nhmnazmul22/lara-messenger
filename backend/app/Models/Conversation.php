@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method where(string $string, int $conversationId)
@@ -30,5 +31,10 @@ class Conversation extends Model
     public function lastMessage(): BelongsTo
     {
         return $this->belongsTo(Message::class, 'last_message_id', 'id');
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'id', 'id');
     }
 }

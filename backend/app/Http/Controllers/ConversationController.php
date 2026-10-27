@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Conversation\ConversationResource;
+use App\Http\Resources\Conversation\MinifiedConversationResource;
 use App\Services\ConversationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class ConversationController extends Controller
 {
@@ -28,8 +28,7 @@ class ConversationController extends Controller
 
         return $this->sendSuccessResponse(
             'User retrieved successful',
-            ConversationResource::collection($result),
-            Response::HTTP_OK
+            MinifiedConversationResource::collection($result),
         );
     }
 
@@ -49,7 +48,6 @@ class ConversationController extends Controller
         return $this->sendSuccessResponse(
             'Conversation retrieved successful',
             new ConversationResource($result),
-            Response::HTTP_OK
         );
     }
 }
