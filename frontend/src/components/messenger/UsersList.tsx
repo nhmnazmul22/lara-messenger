@@ -17,6 +17,8 @@ export function UsersList() {
   const setError = useUser((state) => state.setError);
 
   const fetchUsers = async () => {
+    console.count("fetchUsers called");
+
     try {
       setLoading(true);
       setError(null);
@@ -38,9 +40,11 @@ export function UsersList() {
   };
 
   useEffect(() => {
-    void fetchUsers();
+    if (!users.length) {
+      void fetchUsers();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [users.length]);
 
   if (loading) {
     return (

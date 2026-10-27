@@ -41,9 +41,11 @@ export function ConversationsList() {
   };
 
   useEffect(() => {
-    void fetchConversations();
+    if (!conversations.length) {
+      void fetchConversations();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [conversations.length]);
 
   if (loading) {
     return (
@@ -80,13 +82,11 @@ export function ConversationsList() {
     >
       {conversations.length ? (
         conversations.map((conv) => {
-          const active = Boolean(activeConversation && conv.id === activeConversation.id);
+          const active = Boolean(
+            activeConversation && conv.id === activeConversation.id,
+          );
           return (
-            <ConversationListCard
-              key={conv.id}
-              conv={conv}
-              active={active}
-            />
+            <ConversationListCard key={conv.id} conv={conv} active={active} />
           );
         })
       ) : (
