@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ListCardSkeletonProps {
   count?: number;
@@ -15,14 +16,11 @@ export function ListCardSkeleton({ count = 5 }: ListCardSkeletonProps) {
           key={index}
           className="flex justify-between items-center gap-3 rounded-2xl p-2.5 animate-pulse"
         >
-          <div className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-full bg-muted"></div>
-            <div className="min-w-0 flex-1">
-              <div className="h-4 w-full rounded bg-muted mb-1.5"></div>
-              <div className="h-3 w-5/6 rounded bg-muted"></div>
-            </div>
+          <Skeleton className="h-10 w-10 rounded-full" />
+          <div className="min-w-0 flex-1">
+            <Skeleton className="h-4 w-full rounded-md mb-1.5" />
+            <Skeleton className="h-3 w-5/6 rounded-md" />
           </div>
-          <div className="h-8 w-8 rounded-full bg-muted"></div>
         </div>
       ))}
     </section>

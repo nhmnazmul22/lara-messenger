@@ -1,9 +1,11 @@
 import { User } from "@/types/user";
 import UserListCard from "@/components/sections/UserListCard";
 import { ListCardSkeleton } from "@/components/skeleton/ListCardSkeleton";
+import { NotFound } from "@/components/common/not-found";
 import useUser from "@/store/useUser";
 import { useEffect } from "react";
 import { getUsers } from "@/services/users";
+import { Users } from "lucide-react";
 
 export function UsersList() {
   const users = useUser((state) => state.users);
@@ -32,10 +34,16 @@ export function UsersList() {
       scrollbar-track-transparent scrollbar-gutter-stable"
       aria-label="Users"
     >
-      {!loading ? <ListCardSkeleton /> : (
-        users?.map((user) => (
-          <UserListCard key={user.id} user={user} />
-        ))
+      {loading ? (
+        <ListCardSkeleton />
+      ) : users?.length ? (
+        users.map((user) => <UserListCard key={user.id} user={user} />)
+      ) : (
+        <NotFound
+          title="No users found"
+          description="There are no users available right now."
+          icon={<Users className="w-4 h-4"/>}
+        />
       )}
     </section>
   );
