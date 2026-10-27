@@ -1,5 +1,5 @@
 import { SidebarLists } from "../messenger/SidebarList";
-import { ChatWindow } from "../messenger/chat-window";
+import { ChatWindow } from "../messenger/ChatWindow";
 import { activeChat } from "@/lib/mock-data";
 
 const MainContent = () => {

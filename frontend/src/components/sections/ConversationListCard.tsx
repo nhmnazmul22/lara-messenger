@@ -8,12 +8,11 @@ import useConversation from "@/store/useConversation";
 
 interface ConversationListCardProps {
   conv: conversation;
+  active: boolean;
 }
 
-export function ConversationListCard({ conv }: ConversationListCardProps) {
-  const conversation = useConversation((state) => state.conversation);
+export function ConversationListCard({ conv, active }: ConversationListCardProps) {
   const setConversation = useConversation((state) => state.setConversation);
-  const active = conversation && conv.id === conversation.id;
 
   return (
     <div
@@ -38,7 +37,7 @@ export function ConversationListCard({ conv }: ConversationListCardProps) {
         </div>
         <div className="mt-0.5 flex items-center justify-between gap-2">
           <p className="truncate text-sm text-muted-foreground">
-            {conversation?.last_message_id}
+            {conv?.last_message_id}
           </p>
         </div>
       </div>

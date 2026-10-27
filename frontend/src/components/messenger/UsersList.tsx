@@ -30,6 +30,8 @@ export function UsersList() {
         return;
       }
       setUsers(result.data ?? []);
+    } catch (err) {
+      setError(String(err));
     } finally {
       setLoading(false);
     }

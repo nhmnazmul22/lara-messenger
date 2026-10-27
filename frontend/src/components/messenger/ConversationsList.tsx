@@ -12,12 +12,12 @@ import { MessageCircleOff } from "lucide-react";
 
 export function ConversationsList() {
   const conversations = useConversation((state) => state.conversations);
+  const activeConversation = useConversation((state) => state.conversation);
   const loading = useConversation((state) => state.loading);
   const error = useConversation((state) => state.error);
   const setLoading = useConversation((state) => state.setLoading);
   const setConversations = useConversation((state) => state.setConversations);
   const setError = useConversation((state) => state.setError);
-  const conversation = useConversation()
 
   const fetchConversations = async () => {
     try {
@@ -28,27 +28,22 @@ export function ConversationsList() {
         message?: string;
         data?: conversation[];
       };
-      if (result.success) {
-        setConversations(result.data ?? []);
-      } else {
+      if (!result.success) {
         setError(result.message ?? "Failed to load conversations");
+        return;
       }
+      setConversations(result.data ?? []);
+    } catch (err) {
+      setError(String(err));
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchConversations();
+    void fetchConversations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
-  useEffect(()=>{
-    if(conversation){
-
-    }
-  }, [])
 
   if (loading) {
     return (
@@ -84,9 +79,16 @@ export function ConversationsList() {
       aria-label="Conversations"
     >
       {conversations.length ? (
-        conversations.map((conv) => (
-          <ConversationListCard key={conv.id} conv={conv} />
-        ))
+        conversations.map((conv) => {
+          const active = Boolean(activeConversation && conv.id === activeConversation.id);
+          return (
+            <ConversationListCard
+              key={conv.id}
+              conv={conv}
+              active={active}
+            />
+          );
+        })
       ) : (
         <NotFound
           title="No conversations found"

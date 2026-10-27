@@ -1,17 +1,9 @@
-"use client";
-
 import { MoreVerticalIcon, SearchIcon, VideoIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import useConversation from "@/store/useConversation";
 import UserAvatar from "../common/UserAvatar";
+import { conversation } from "@/types/conversation";
 
-export function ChatHeader() {
-  const conversation = useConversation((state) => state.conversation);
-
-  if (!conversation) {
-    return null;
-  }
-
+export function ChatHeader({ conversation }: { conversation: conversation }) {
   return (
     <div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b px-3 sm:px-4">
       <div className="flex min-w-0 items-center gap-3">

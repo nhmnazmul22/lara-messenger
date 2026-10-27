@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Button } from "@/components/ui/button";
 import { Loader2, MessageCircle } from "lucide-react";
 import { User } from "@/types/user";
@@ -9,6 +8,7 @@ import { startConversation } from "@/services/conversation";
 import { toast } from "../ui/toast";
 import { conversation } from "@/types/conversation";
 import { useSidebar } from "@/contexts/SidebarContext";
+import UserAvatar from "../common/UserAvatar";
 
 const UserListCard = ({ user }: { user: User }) => {
   const setConversation = useConversation((state) => state.setConversation);
@@ -43,7 +43,11 @@ const UserListCard = ({ user }: { user: User }) => {
       onClick={handleStartConversation}
     >
       <div className="flex items-center gap-2">
-
+        <UserAvatar
+          avatar={user.avatar}
+          alt={user.name}
+          fallback={user.name[0]}
+        />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">{user.name}</p>
           <p className="mt-0.5 truncate text-sm text-muted-foreground">
