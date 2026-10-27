@@ -1,4 +1,4 @@
-import { SidebarLists } from "../messenger/sidebar-lists";
+import { SidebarLists } from "../messenger/SidebarList";
 import { ChatWindow } from "../messenger/chat-window";
 import { activeChat, conversations, users } from "@/lib/mock-data";
 

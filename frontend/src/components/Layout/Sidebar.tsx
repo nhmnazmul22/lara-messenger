@@ -2,7 +2,7 @@
 
 import { useConversation } from "@/contexts/ConversationContext";
 import { cn } from "@/lib/utils";
-import { SidebarLists } from "../messenger/sidebar-lists";
+import { SidebarLists } from "../messenger/SidebarList";
 import { activeChat, conversations, users } from "@/lib/mock-data";
 
 const Sidebar = () => {
@@ -20,10 +20,7 @@ const Sidebar = () => {
           : "pointer-events-none -translate-x-full",
       )}
     >
-      <SidebarLists
-        conversations={conversations}
-        activeId={activeChat.id}
-      />
+      <SidebarLists conversations={conversations} activeId={activeChat.id} />
     </aside>
   );
 };

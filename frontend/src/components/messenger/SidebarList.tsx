@@ -3,25 +3,19 @@
 import { MessageSquareIcon, UsersIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ConversationsList } from "./conversations";
-import { UsersList } from "./users";
-import type { Conversation } from "@/lib/mock-data";
+import { ConversationsList } from "./ConversationsList";
+import { UsersList } from "./UsersList";
 import { useSidebar } from "@/contexts/SidebarContext";
 import useUser from "@/store/useUser";
+import useConversation from "@/store/useConversation";
 
 const iconTransition =
   "absolute transition-opacity transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)]";
 
-export function SidebarLists({
-  conversations,
-  activeId,
-}: {
-  conversations: Conversation[];
-  activeId: string;
-}) {
+export function SidebarLists() {
   const { showUsers, setShowUsers } = useSidebar();
   const users = useUser((state) => state.users);
-
+  const conversations = useConversation((state) => state.conversations);
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">
@@ -67,14 +61,7 @@ export function SidebarLists({
         key={showUsers ? "users" : "conversations"}
         className="flex min-h-0 flex-1 flex-col animate-in fade-in-0 duration-200"
       >
-        {showUsers ? (
-          <UsersList />
-        ) : (
-          <ConversationsList
-            conversations={conversations}
-            activeId={activeId}
-          />
-        )}
+        {showUsers ? <UsersList /> : <ConversationsList />}
       </div>
     </div>
   );
