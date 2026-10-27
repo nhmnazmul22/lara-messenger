@@ -24,8 +24,8 @@ export function ChatWindow({ chat }: { chat: typeof activeChat }) {
       <ChatHeader conversation={conversation} />
       <Messages
         messages={chat.messages}
-        senderName={chat.recipient.name}
-        senderInitials={chat.recipient.initials}
+        senderName={conversation.receiver.name}
+        senderInitials={conversation.receiver.name[0]}
       />
       <Composer />
     </div>

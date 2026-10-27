@@ -7,7 +7,11 @@ export function ChatHeader({ conversation }: { conversation: conversation }) {
   return (
     <div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b px-3 sm:px-4">
       <div className="flex min-w-0 items-center gap-3">
-        <UserAvatar avatar={conversation.receiver.avatar} />
+        <UserAvatar
+          avatar={conversation.receiver.avatar}
+          alt={conversation.receiver.name}
+          fallback={conversation.receiver.name[0]}
+        />
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold">
             {conversation.receiver.name}
