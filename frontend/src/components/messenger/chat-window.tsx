@@ -6,7 +6,7 @@ import type { activeChat } from "@/lib/mock-data";
 export function ChatWindow({ chat }: { chat: typeof activeChat }) {
   return (
     <div className="flex min-h-0 min-w-0 flex-col">
-      <ChatHeader recipient={chat.recipient} />
+      <ChatHeader />
       <Messages
         messages={chat.messages}
         senderName={chat.recipient.name}

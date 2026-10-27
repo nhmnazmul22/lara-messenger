@@ -17,6 +17,7 @@ export function ConversationsList() {
   const setLoading = useConversation((state) => state.setLoading);
   const setConversations = useConversation((state) => state.setConversations);
   const setError = useConversation((state) => state.setError);
+  const conversation = useConversation()
 
   const fetchConversations = async () => {
     try {
@@ -41,6 +42,13 @@ export function ConversationsList() {
     fetchConversations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+
+  useEffect(()=>{
+    if(conversation){
+
+    }
+  }, [])
 
   if (loading) {
     return (

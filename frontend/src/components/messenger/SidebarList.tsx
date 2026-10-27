@@ -8,6 +8,7 @@ import { UsersList } from "./UsersList";
 import { useSidebar } from "@/contexts/SidebarContext";
 import useUser from "@/store/useUser";
 import useConversation from "@/store/useConversation";
+import { useEffect } from "react";
 
 const iconTransition =
   "absolute transition-opacity transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)]";
@@ -16,6 +17,14 @@ export function SidebarLists() {
   const { showUsers, setShowUsers } = useSidebar();
   const users = useUser((state) => state.users);
   const conversations = useConversation((state) => state.conversations);
+  const conversation = useConversation((state) => state.conversation);
+  const setConversation = useConversation((state) => state.setConversation);
+
+  useEffect(() => {
+    if (!conversation && conversations.length > 0) {
+      setConversation(conversations[0]);
+    }
+  }, [conversation, conversations, setConversation]);
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">

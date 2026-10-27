@@ -12,6 +12,7 @@ interface ConversationListCardProps {
 
 export function ConversationListCard({ conv }: ConversationListCardProps) {
   const conversation = useConversation((state) => state.conversation);
+  const setConversation = useConversation((state) => state.setConversation);
   const active = conversation && conv.id === conversation.id;
 
   return (
@@ -22,6 +23,7 @@ export function ConversationListCard({ conv }: ConversationListCardProps) {
         "flex cursor-default items-center gap-3 rounded-2xl p-2.5 transition-colors",
         active ? "bg-accent text-accent-foreground" : "hover:bg-muted/70",
       )}
+      onClick={() => setConversation(conv)}
     >
       <UserAvatar
         avatar={conv.receiver.avatar}

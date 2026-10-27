@@ -1,20 +1,16 @@
 import { SidebarLists } from "../messenger/SidebarList";
 import { ChatWindow } from "../messenger/chat-window";
-import { activeChat, conversations, users } from "@/lib/mock-data";
+import { activeChat } from "@/lib/mock-data";
 
-const MobileView = () => {
+const MainContent = () => {
   return (
     <div className="grid min-h-0 flex-1 grid-cols-1 lg:grid-cols-[340px_1fr]">
       <div className="hidden min-h-0 border-r border-border lg:block">
-        <SidebarLists
-          conversations={conversations}
-          users={users}
-          activeId={activeChat.id}
-        />
+        <SidebarLists />
       </div>
       <ChatWindow chat={activeChat} />
     </div>
   );
 };
 
-export default MobileView;
+export default MainContent;
