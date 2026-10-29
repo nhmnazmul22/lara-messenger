@@ -49,4 +49,10 @@ class ConversationService
     {
         return $this->repository->hasParticipants($conversationId, $senderId, $receiverId);
     }
+
+
+    public function updateConversation(int $conversationId, array $attributes): bool
+    {
+        return $this->repository->update($conversationId, $attributes);
+    }
 }

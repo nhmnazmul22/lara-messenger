@@ -9,6 +9,13 @@ export interface User {
   updated_at?: Date;
 }
 
+export interface MinifiedUser {
+  id: number;
+  name: string;
+  avatar: string;
+}
+
+
 export interface UserStore {
   loading: boolean;
   error: string | null;

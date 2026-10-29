@@ -1,4 +1,5 @@
 import { User } from "@/types/user";
+import { Message } from "./message";
 
 export type conversation = {
   id: number;
@@ -14,6 +15,7 @@ export type ConversationWithMessages = {
   sender: User;
   receiver: User;
   last_message_id: number | null;
+  messages: Message[] | [];
   created_at?: Date;
   updated_at?: Date;
 };
