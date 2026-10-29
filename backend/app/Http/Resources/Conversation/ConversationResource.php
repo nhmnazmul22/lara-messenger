@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Conversation;
 
+use App\Http\Resources\Message\MessageResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +20,7 @@ class ConversationResource extends JsonResource
             'sender' => $this->resource->userOne,
             'receiver' => $this->resource->userTwo,
             'last_message_id' => $this->resource->last_message_id,
-            'message' => $this->whenLoaded('messages', $this->resource->messages),
+            'message' => $this->whenLoaded('messages', MessageResource::collection($this->resource->messages)),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];

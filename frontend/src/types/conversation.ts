@@ -9,6 +9,15 @@ export type conversation = {
   updated_at?: Date;
 };
 
+export type ConversationWithMessages = {
+  id: number;
+  sender: User;
+  receiver: User;
+  last_message_id: number | null;
+  created_at?: Date;
+  updated_at?: Date;
+};
+
 export interface ConversationStore {
   startingConversation: number | null;
   loading: boolean;

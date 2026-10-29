@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Message;
 
 use App\Http\Resources\Group\MinifiedGroupResource;
-use App\Http\Resources\Users\UserResource;
+use App\Http\Resources\Users\MinifiedUserResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,8 +18,8 @@ class MessageResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
-            'sender' => $this->whenLoaded('sender', new UserResource($this->resource->sender)),
-            'receiver' => $this->whenLoaded('receiver', new UserResource($this->resource->receiver)),
+            'sender' => $this->whenLoaded('sender', new MinifiedUserResource($this->resource->sender)),
+            'receiver' => $this->whenLoaded('receiver', new MinifiedUserResource($this->resource->receiver)),
             'group' => $this->whenLoaded('group', new MinifiedGroupResource($this->resource->group)),
             'conversation_id' => $this->resource->conversation_id,
             'attachments' => $this->whenLoaded('attachments', $this->resource->attachments),
