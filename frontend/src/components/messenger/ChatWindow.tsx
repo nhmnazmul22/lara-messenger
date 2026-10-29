@@ -36,7 +36,7 @@ export function ChatWindow() {
     if (conversation?.receiver.id) {
       fetchConversation(conversation.receiver.id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation]);
 
   if (!conversation || !conversationWithMessages) {
@@ -51,11 +51,7 @@ export function ChatWindow() {
   return (
     <div className="flex min-h-0 min-w-0 flex-col">
       <ChatHeader conversation={conversation} />
-      <Messages
-        messages={conversationWithMessages.messages}
-        senderName={conversation.receiver.name}
-        senderInitials={conversation.receiver.name[0]}
-      />
+      <Messages messages={conversationWithMessages.messages} />
       <Composer />
     </div>
   );

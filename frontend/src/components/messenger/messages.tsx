@@ -1,17 +1,16 @@
 "use client";
 
-import { FileTextIcon, ImageIcon } from "lucide-react";
+// import { FileTextIcon, ImageIcon } from "lucide-react";
 
-import {
-  Attachment,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentMedia,
-  AttachmentTitle,
-} from "@/components/ui/attachment";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+// import {
+//   Attachment,
+//   AttachmentContent,
+//   AttachmentDescription,
+//   AttachmentMedia,
+//   AttachmentTitle,
+// } from "@/components/ui/attachment";
 import { Bubble, BubbleContent } from "@/components/ui/bubble";
-import { Marker, MarkerContent } from "@/components/ui/marker";
+// import { Marker, MarkerContent } from "@/components/ui/marker";
 import {
   Message,
   MessageAvatar,
@@ -25,35 +24,32 @@ import {
   MessageScrollerProvider,
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
-import type { ChatMessage } from "@/lib/mock-data";
+import { Message as MessageType } from "@/types/message";
+import { useAuth } from "@/contexts/AuthContext";
+import { formatDateTime } from "@/utils/date";
+import UserAvatar from "../common/UserAvatar";
 
-function MessageBubble({
-  message,
-  senderInitials,
-}: {
-  message: ChatMessage;
-  senderInitials: string;
-}) {
-  const isMe = message.sender === "me";
+function MessageBubble({ message }: { message: MessageType }) {
+  const { profile } = useAuth();
+
+  const isMe = message.sender.id === profile?.id;
 
   return (
     <Message align={isMe ? "end" : "start"}>
       {!isMe && (
         <MessageAvatar>
-          <Avatar className="size-8">
-            <AvatarFallback>{senderInitials}</AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            avatar={message.sender.avatar}
+            alt={message.sender.name}
+            fallback={message.sender.name[0]}
+          />
         </MessageAvatar>
       )}
       <MessageContent>
-        {message.kind === "attachment" ? (
+        {/* {message.kind === "attachment" ? (
           <Attachment>
             <AttachmentMedia variant="icon">
-              {message.fileIcon === "image" ? (
-                <ImageIcon />
-              ) : (
-                <FileTextIcon />
-              )}
+              {message.fileIcon === "image" ? <ImageIcon /> : <FileTextIcon />}
             </AttachmentMedia>
             <AttachmentContent>
               <AttachmentTitle>{message.fileName}</AttachmentTitle>
@@ -65,46 +61,44 @@ function MessageBubble({
             variant={isMe ? "default" : "secondary"}
             align={isMe ? "end" : "start"}
           >
-            <BubbleContent>{message.text}</BubbleContent>
+            <BubbleContent>{message.message}</BubbleContent>
           </Bubble>
-        )}
-        <MessageFooter>{message.time}</MessageFooter>
+        )} */}
+        <Bubble
+          variant={isMe ? "default" : "secondary"}
+          align={isMe ? "end" : "start"}
+        >
+          <BubbleContent>{message.message}</BubbleContent>
+        </Bubble>
+        <MessageFooter>{formatDateTime(message.created_at)}</MessageFooter>
       </MessageContent>
     </Message>
   );
 }
 
-export function Messages({
-  messages,
-  senderName,
-  senderInitials,
-}: {
-  messages: ChatMessage[];
-  senderName: string;
-  senderInitials: string;
-}) {
+export function Messages({ messages }: { messages: MessageType[] }) {
   return (
     <MessageScrollerProvider autoScroll>
       <MessageScroller className="flex-1">
         <MessageScrollerViewport
-  id="message-scroller-viewport"
-  className="scrollbar-thumb-border scrollbar-track-transparent"
->
+          id="message-scroller-viewport"
+          className="scrollbar-thumb-border scrollbar-track-transparent"
+        >
           <MessageScrollerContent className="gap-6 px-3 py-4 sm:px-5">
-            <Marker variant="separator" className="px-2">
+            {/* <Marker variant="separator" className="px-2">
               <MarkerContent>Today</MarkerContent>
-            </Marker>
+            </Marker> */}
 
-            {messages.map((message) => (
-              <MessageScrollerItem key={message.id} messageId={message.id}>
-                <MessageBubble
-                  message={message}
-                  senderInitials={senderInitials}
-                />
+            {messages?.map((message) => (
+              <MessageScrollerItem
+                key={message.id}
+                messageId={message.id.toString()}
+              >
+                <MessageBubble message={message} />
               </MessageScrollerItem>
             ))}
 
-            <MessageScrollerItem messageId="typing">
+            {/* <MessageScrollerItem messageId="typing">
               <Message align="start">
                 <MessageAvatar>
                   <Avatar className="size-8">
@@ -119,7 +113,7 @@ export function Messages({
                   </Bubble>
                 </MessageContent>
               </Message>
-            </MessageScrollerItem>
+            </MessageScrollerItem> */}
           </MessageScrollerContent>
         </MessageScrollerViewport>
       </MessageScroller>

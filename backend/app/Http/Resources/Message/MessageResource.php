@@ -18,6 +18,7 @@ class MessageResource extends JsonResource
     {
         return [
             'id' => $this->resource->id,
+            'message' => $this->resource->message,
             'sender' => $this->whenLoaded('sender', new MinifiedUserResource($this->resource->sender)),
             'receiver' => $this->whenLoaded('receiver', new MinifiedUserResource($this->resource->receiver)),
             'group' => $this->whenLoaded('group', new MinifiedGroupResource($this->resource->group)),

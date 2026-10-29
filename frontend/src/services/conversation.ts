@@ -1,6 +1,6 @@
 import appConfig from "@/config/app";
 import { getAuthToken } from "@/utils/token";
-import { conversation } from "@/types/conversation";
+import { conversation, ConversationWithMessages } from "@/types/conversation";
 
 export const startConversation = async (receiverId: number) => {
   try {
@@ -24,7 +24,7 @@ export const startConversation = async (receiverId: number) => {
     return {
       success: true,
       message: result?.message ?? "Conversation fetch successful",
-      data: result.data as conversation,
+      data: result.data as ConversationWithMessages,
     };
   } catch (err) {
     return {
@@ -36,17 +36,14 @@ export const startConversation = async (receiverId: number) => {
 
 export const getAllConversations = async () => {
   try {
-    const response = await fetch(
-      `${appConfig.BASE_URL}/conversations`,
-      {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${getAuthToken()}`,
-        },
+    const response = await fetch(`${appConfig.BASE_URL}/conversations`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
       },
-    );
+    });
 
     const result = await response.json();
 
@@ -65,4 +62,3 @@ export const getAllConversations = async () => {
     };
   }
 };
-
