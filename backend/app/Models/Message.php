@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @method create(array $attributes)
+ * @method where(string $string, int $conversationId)
  */
 class Message extends Model
 {
@@ -23,6 +24,7 @@ class Message extends Model
     {
         return $this->belongsTo(User::class, 'sender_id', 'id');
     }
+
     public function receiver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'receiver_id', 'id');

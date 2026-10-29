@@ -26,6 +26,7 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('/messages')->as('.messages')->group(function () {
         Route::post('/send', [MessageController::class, 'sendMessage'])->name('send');
+        Route::get('/{conversation}', [MessageController::class, 'conversationMessages'])->name('messages');
     });
 
     Route::prefix('/groups')->as('.groups')->group(function () {

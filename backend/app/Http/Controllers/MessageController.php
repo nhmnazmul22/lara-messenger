@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Message\SendMessageRequest;
 use App\Http\Resources\Message\MessageResource;
+use App\Models\Conversation;
 use App\Services\MessageService;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -26,6 +28,17 @@ class MessageController extends Controller
             'Message send successful',
             new MessageResource($message),
             Response::HTTP_CREATED
+        );
+    }
+
+
+    public function conversationMessages(Request $request, Conversation $conversation)
+    {
+        $messages = $this->messageService->getConversationMessages($conversation);
+
+        return $this->sendSuccessResponse(
+            'Messages retrieved successful',
+            $messages,
         );
     }
 

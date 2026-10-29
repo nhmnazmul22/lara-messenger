@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Conversation;
 use App\Models\Message;
 use App\Repository\MessageRepository;
 use Illuminate\Http\UploadedFile;
@@ -84,6 +85,12 @@ class MessageService
         ]);
 
         return $path;
+    }
+
+
+    public function getConversationMessages(Conversation $conversation)
+    {
+        return $this->messageRepository->findConversationMessages($conversation->id);
     }
 }
 
