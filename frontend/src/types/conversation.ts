@@ -10,28 +10,18 @@ export type conversation = {
   updated_at?: Date;
 };
 
-export type ConversationWithMessages = {
-  id: number;
-  sender: User;
-  receiver: User;
-  last_message: Message | null;
-  messages: Message[] | [];
-  created_at?: Date;
-  updated_at?: Date;
-};
-
 export interface ConversationStore {
   startingConversation: number | null;
   loading: boolean;
   error: string | null;
   conversation: conversation | null;
-  conversationWithMessages: ConversationWithMessages | null;
+  messages: Message[] | [];
   conversations: conversation[] | [];
 
   setStartingConversation: (conversationId: number | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setConversation: (conversation: conversation) => void;
-  setConversationWithMessages: (conversation: ConversationWithMessages) => void;
+  setMessages: (messages: Message[]) => void;
   setConversations: (conversations: conversation[]) => void;
 }

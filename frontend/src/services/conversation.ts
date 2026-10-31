@@ -1,6 +1,6 @@
 import appConfig from "@/config/app";
 import { getAuthToken } from "@/utils/token";
-import { conversation, ConversationWithMessages } from "@/types/conversation";
+import { conversation } from "@/types/conversation";
 
 export const startConversation = async (receiverId: number) => {
   try {
@@ -24,7 +24,7 @@ export const startConversation = async (receiverId: number) => {
     return {
       success: true,
       message: result?.message ?? "Conversation fetch successful",
-      data: result.data as ConversationWithMessages,
+      data: result.data as conversation,
     };
   } catch (err) {
     return {

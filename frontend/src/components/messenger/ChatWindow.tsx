@@ -6,21 +6,17 @@ import { Messages } from "@/components/messenger/messages";
 import useConversation from "@/store/useConversation";
 import { Error } from "@/components/common/error";
 import { useEffect } from "react";
-import { startConversation } from "@/services/conversation";
 import { toast } from "../ui/toast";
-import { ConversationWithMessages } from "@/types/conversation";
+import { getMessagesByConversation } from "@/services/message";
+import { Message } from "@/types/message";
 
 export function ChatWindow() {
   const conversation = useConversation((state) => state.conversation);
-  const conversationWithMessages = useConversation(
-    (state) => state.conversationWithMessages,
-  );
-  const setConversationWithMessages = useConversation(
-    (state) => state.setConversationWithMessages,
-  );
+  const messages = useConversation((state) => state.messages);
+  const setMessages = useConversation((state) => state.setMessages);
 
-  const fetchConversation = async (receiverId: number) => {
-    const result = await startConversation(receiverId);
+  const fetchMessages = async (conversationId: number) => {
+    const result = await getMessagesByConversation(conversationId);
     if (!result.success) {
       toast.add({
         type: "error",
@@ -28,18 +24,17 @@ export function ChatWindow() {
       });
       return;
     }
-
-    setConversationWithMessages(result.data as ConversationWithMessages);
+    setMessages(result.data as Message[]);
   };
 
   useEffect(() => {
     if (conversation?.receiver.id) {
-      fetchConversation(conversation.receiver.id);
+      fetchMessages(conversation.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation]);
 
-  if (!conversation || !conversationWithMessages) {
+  if (!conversation || !messages.length) {
     return (
       <Error
         title="Conversation not found"
@@ -51,7 +46,7 @@ export function ChatWindow() {
   return (
     <div className="flex min-h-0 min-w-0 flex-col">
       <ChatHeader conversation={conversation} />
-      <Messages messages={conversationWithMessages.messages} />
+      <Messages messages={messages} />
       <Composer />
     </div>
   );

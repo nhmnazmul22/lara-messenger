@@ -6,7 +6,7 @@ const useConversation = create<ConversationStore>((set) => ({
   loading: false,
   error: null,
   conversation: null,
-  conversationWithMessages: null,
+  messages: [],
   conversations: [],
 
   setLoading: (loading) => {
@@ -29,9 +29,9 @@ const useConversation = create<ConversationStore>((set) => ({
       conversation,
     });
   },
-  setConversationWithMessages: (conversationWithMessages) => {
+  setMessages: (messages) => {
     set({
-      conversationWithMessages,
+      messages,
     });
   },
   setConversations: (conversations) => {
