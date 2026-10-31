@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Conversation\ConversationResource;
-use App\Http\Resources\Conversation\MinifiedConversationResource;
 use App\Services\ConversationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -28,7 +27,7 @@ class ConversationController extends Controller
 
         return $this->sendSuccessResponse(
             'User retrieved successful',
-            MinifiedConversationResource::collection($result),
+            ConversationResource::collection($result),
         );
     }
 
