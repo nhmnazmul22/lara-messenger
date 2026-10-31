@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Message\SendMessageRequest;
 use App\Http\Resources\Message\MessageResource;
+use App\Http\Resources\Message\PaginatedMessageResource;
 use App\Models\Conversation;
 use App\Services\MessageService;
 use Illuminate\Http\Request;
@@ -36,10 +37,11 @@ class MessageController extends Controller
     {
         $messages = $this->messageService->getConversationMessages($conversation);
 
-        return $this->sendSuccessResponse(
-            'Messages retrieved successful',
-            $messages,
-        );
+        return (new PaginatedMessageResource($messages))
+            ->additional([
+                'success' => true,
+                'message' => 'Messages retrieved successfully',
+            ]);
     }
 
 }
