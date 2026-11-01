@@ -1,6 +1,5 @@
 import { SidebarLists } from "../messenger/SidebarList";
 import { ChatWindow } from "../messenger/ChatWindow";
-import { activeChat } from "@/lib/mock-data";
 
 const MainContent = () => {
   return (
@@ -8,7 +7,7 @@ const MainContent = () => {
       <div className="hidden min-h-0 border-r border-border lg:block">
         <SidebarLists />
       </div>
-      <ChatWindow chat={activeChat} />
+      <ChatWindow />
     </div>
   );
 };

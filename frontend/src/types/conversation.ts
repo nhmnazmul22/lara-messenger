@@ -13,6 +13,7 @@ export type conversation = {
 export interface ConversationStore {
   startingConversation: number | null;
   loading: boolean;
+  loadingMessages: boolean;
   error: string | null;
   conversation: conversation | null;
   messages: Message[] | [];
@@ -20,6 +21,7 @@ export interface ConversationStore {
 
   setStartingConversation: (conversationId: number | null) => void;
   setLoading: (loading: boolean) => void;
+  setLoadingMessages: (loadingMessages: boolean) => void;
   setError: (error: string | null) => void;
   setConversation: (conversation: conversation) => void;
   setMessages: (messages: Message[]) => void;

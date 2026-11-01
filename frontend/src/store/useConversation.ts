@@ -4,6 +4,7 @@ import { create } from "zustand";
 const useConversation = create<ConversationStore>((set) => ({
   startingConversation: null,
   loading: false,
+  loadingMessages: false,
   error: null,
   conversation: null,
   messages: [],
@@ -12,6 +13,12 @@ const useConversation = create<ConversationStore>((set) => ({
   setLoading: (loading) => {
     set({
       loading,
+    });
+  },
+
+  setLoadingMessages: (loadingMessages) => {
+    set({
+      loadingMessages,
     });
   },
   setStartingConversation: (conversationId) => {

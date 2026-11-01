@@ -12,29 +12,35 @@ import { Message } from "@/types/message";
 
 export function ChatWindow() {
   const conversation = useConversation((state) => state.conversation);
-  const messages = useConversation((state) => state.messages);
   const setMessages = useConversation((state) => state.setMessages);
-
+  const setLoadingMessages = useConversation(
+    (state) => state.setLoadingMessages,
+  );
   const fetchMessages = async (conversationId: number) => {
-    const result = await getMessagesByConversation(conversationId);
-    if (!result.success) {
-      toast.add({
-        type: "error",
-        description: result.message ?? "Conversation start failed",
-      });
-      return;
+    try {
+      setLoadingMessages(true);
+      const result = await getMessagesByConversation(conversationId);
+      if (!result.success) {
+        toast.add({
+          type: "error",
+          description: result.message ?? "Conversation start failed",
+        });
+        return;
+      }
+      setMessages(result.data as Message[]);
+    } finally {
+      setLoadingMessages(false);
     }
-    setMessages(result.data as Message[]);
   };
 
   useEffect(() => {
-    if (conversation?.receiver.id) {
+    if (conversation?.id) {
       fetchMessages(conversation.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversation]);
+  }, [conversation?.id]);
 
-  if (!conversation || !messages.length) {
+  if (!conversation) {
     return (
       <Error
         title="Conversation not found"
@@ -46,7 +52,7 @@ export function ChatWindow() {
   return (
     <div className="flex min-h-0 min-w-0 flex-col">
       <ChatHeader conversation={conversation} />
-      <Messages messages={messages} />
+      <Messages />
       <Composer />
     </div>
   );

@@ -19,6 +19,7 @@ const UserAvatar = ({
           alt={alt}
           width={400}
           height={400}
+          className="object-cover rounded-full object-top"
         />
       ) : (
         <AvatarFallback className={"bg-gray-200 text-black"}>

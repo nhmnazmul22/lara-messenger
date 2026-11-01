@@ -28,6 +28,8 @@ import { Message as MessageType } from "@/types/message";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatDateTime } from "@/utils/date";
 import UserAvatar from "../common/UserAvatar";
+import useConversation from "@/store/useConversation";
+import { MessagesSkeleton } from "@/components/skeleton/MessagesSkeleton";
 
 function MessageBubble({ message }: { message: MessageType }) {
   const { profile } = useAuth();
@@ -76,7 +78,10 @@ function MessageBubble({ message }: { message: MessageType }) {
   );
 }
 
-export function Messages({ messages }: { messages: MessageType[] }) {
+export function Messages() {
+  const messages = useConversation((state) => state.messages);
+  const loadingMessages = useConversation((state) => state.loadingMessages);
+
   return (
     <MessageScrollerProvider autoScroll>
       <MessageScroller className="flex-1">
@@ -89,14 +94,18 @@ export function Messages({ messages }: { messages: MessageType[] }) {
               <MarkerContent>Today</MarkerContent>
             </Marker> */}
 
-            {messages?.map((message) => (
-              <MessageScrollerItem
-                key={message.id}
-                messageId={message.id.toString()}
-              >
-                <MessageBubble message={message} />
-              </MessageScrollerItem>
-            ))}
+            {loadingMessages ? (
+              <MessagesSkeleton />
+            ) : (
+              messages?.map((message) => (
+                <MessageScrollerItem
+                  key={message.id}
+                  messageId={message.id.toString()}
+                >
+                  <MessageBubble message={message} />
+                </MessageScrollerItem>
+              ))
+            )}
 
             {/* <MessageScrollerItem messageId="typing">
               <Message align="start">
