@@ -34,3 +34,33 @@ export const getMessagesByConversation = async (conversationId: number) => {
     };
   }
 };
+
+export const sendMessage = async (data: FormData) => {
+  try {
+    const response = await fetch(`${appConfig.BASE_URL}/messages/send`, {
+      method: "POST",
+      body: data,
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
+      },
+    });
+
+    const result = await response.json();
+
+    if (!result?.success) {
+      throw new Error(result?.message || "Message send filed");
+    }
+
+    return {
+      success: true,
+      message: result?.message ?? "Message send successful",
+      data: result.data as Message
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Message send failed",
+    };
+  }
+};

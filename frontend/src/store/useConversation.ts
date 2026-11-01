@@ -1,4 +1,5 @@
 import { ConversationStore } from "@/types/conversation";
+import { initialMessage } from "@/types/message";
 import { create } from "zustand";
 
 const useConversation = create<ConversationStore>((set) => ({
@@ -6,16 +7,18 @@ const useConversation = create<ConversationStore>((set) => ({
   loading: true,
   loadingMessages: true,
   error: null,
+  sendingMessage: false,
+
   conversation: null,
   messages: [],
   conversations: [],
+  sendMessageFormData: initialMessage,
 
   setLoading: (loading) => {
     set({
       loading,
     });
   },
-
   setLoadingMessages: (loadingMessages) => {
     set({
       loadingMessages,
@@ -31,6 +34,12 @@ const useConversation = create<ConversationStore>((set) => ({
       error,
     });
   },
+  setSendingMessage: (sendingMessage) => {
+    set({
+      sendingMessage,
+    });
+  },
+
   setConversation: (conversation) => {
     set({
       conversation,
@@ -44,6 +53,21 @@ const useConversation = create<ConversationStore>((set) => ({
   setConversations: (conversations) => {
     set({
       conversations,
+    });
+  },
+
+  setMessagePayload: (key, value) => {
+    set((prev) => ({
+      sendMessageFormData: {
+        ...prev.sendMessageFormData,
+        [key]: value,
+      },
+    }));
+  },
+
+  resetMessagePayload: () => {
+    set({
+      sendMessageFormData: initialMessage,
     });
   },
 }));

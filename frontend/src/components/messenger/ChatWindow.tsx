@@ -1,7 +1,7 @@
 "use client";
 
 import { ChatHeader } from "@/components/messenger/ChatHeader";
-import { Composer } from "@/components/messenger/composer";
+import { Composer } from "@/components/messenger/Composer";
 import { Messages } from "@/components/messenger/Messages";
 import useConversation from "@/store/useConversation";
 import { Error } from "@/components/common/error";

@@ -1,5 +1,5 @@
 import { User } from "@/types/user";
-import { Message } from "./message";
+import { Message, SendMessageFromDataType } from "./message";
 
 export type conversation = {
   id: number;
@@ -15,15 +15,25 @@ export interface ConversationStore {
   loading: boolean;
   loadingMessages: boolean;
   error: string | null;
+  sendingMessage: boolean;
+
   conversation: conversation | null;
   messages: Message[] | [];
   conversations: conversation[] | [];
+  sendMessageFormData: SendMessageFromDataType;
 
   setStartingConversation: (conversationId: number | null) => void;
   setLoading: (loading: boolean) => void;
   setLoadingMessages: (loadingMessages: boolean) => void;
   setError: (error: string | null) => void;
+  setSendingMessage: (sendingMessage: boolean) => void;
+
   setConversation: (conversation: conversation) => void;
   setMessages: (messages: Message[]) => void;
   setConversations: (conversations: conversation[]) => void;
+  setMessagePayload: (
+    key: keyof SendMessageFromDataType,
+    value: string,
+  ) => void;
+  resetMessagePayload: () => void;
 }

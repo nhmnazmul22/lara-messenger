@@ -10,3 +10,12 @@ export interface Message {
   created_at: string;
   updated_at: string;
 }
+
+export interface SendMessageFromDataType {
+  message: string;
+  attachments?: File[];
+}
+
+export const initialMessage: SendMessageFromDataType = {
+  message: "",
+};
