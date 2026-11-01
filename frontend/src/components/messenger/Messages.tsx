@@ -30,6 +30,7 @@ import { formatDateTime } from "@/utils/date";
 import UserAvatar from "../common/UserAvatar";
 import useConversation from "@/store/useConversation";
 import { MessagesSkeleton } from "@/components/skeleton/MessagesSkeleton";
+import { Error } from "../common/error";
 
 function MessageBubble({ message }: { message: MessageType }) {
   const { profile } = useAuth();
@@ -96,6 +97,11 @@ export function Messages() {
 
             {loadingMessages ? (
               <MessagesSkeleton />
+            ) : !loadingMessages && !messages.length ? (
+              <Error
+                title="Conversation not started"
+                description="Send a message to start the conversations"
+              />
             ) : (
               messages?.map((message) => (
                 <MessageScrollerItem

@@ -2,7 +2,7 @@
 
 import { ChatHeader } from "@/components/messenger/ChatHeader";
 import { Composer } from "@/components/messenger/composer";
-import { Messages } from "@/components/messenger/messages";
+import { Messages } from "@/components/messenger/Messages";
 import useConversation from "@/store/useConversation";
 import { Error } from "@/components/common/error";
 import { useEffect } from "react";
