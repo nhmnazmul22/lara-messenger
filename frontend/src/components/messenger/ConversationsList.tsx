@@ -58,7 +58,7 @@ export function ConversationsList() {
     );
   }
 
-  if (error) {
+  if (!loading && error) {
     return (
       <nav
         className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2.5 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent scrollbar-gutter-stable"
@@ -80,7 +80,13 @@ export function ConversationsList() {
       className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2.5 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent scrollbar-gutter-stable"
       aria-label="Conversations"
     >
-      {conversations.length ? (
+      {!loading && !conversations.length ? (
+        <NotFound
+          title="No conversations found"
+          description="You don't have any conversations yet."
+          icon={<MessageCircleOff className="w-4 h-4" />}
+        />
+      ) : (
         conversations.map((conv) => {
           const active = Boolean(
             activeConversation && conv.id === activeConversation.id,
@@ -89,12 +95,6 @@ export function ConversationsList() {
             <ConversationListCard key={conv.id} conv={conv} active={active} />
           );
         })
-      ) : (
-        <NotFound
-          title="No conversations found"
-          description="You don't have any conversations yet."
-          icon={<MessageCircleOff className="w-4 h-4" />}
-        />
       )}
     </nav>
   );

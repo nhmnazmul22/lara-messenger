@@ -9,10 +9,12 @@ import { useEffect } from "react";
 import { toast } from "../ui/toast";
 import { getMessagesByConversation } from "@/services/message";
 import { Message } from "@/types/message";
+import { ChatWindowSkeleton } from "../skeleton/ChatWindowSkeleton";
 
 export function ChatWindow() {
   const conversation = useConversation((state) => state.conversation);
   const setMessages = useConversation((state) => state.setMessages);
+  const loading = useConversation((state) => state.loading);
   const setLoadingMessages = useConversation(
     (state) => state.setLoadingMessages,
   );
@@ -39,6 +41,10 @@ export function ChatWindow() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversation?.id]);
+
+  if (loading) {
+    return <ChatWindowSkeleton />;
+  }
 
   if (!conversation) {
     return (

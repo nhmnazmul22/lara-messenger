@@ -3,8 +3,8 @@ import { create } from "zustand";
 
 const useConversation = create<ConversationStore>((set) => ({
   startingConversation: null,
-  loading: false,
-  loadingMessages: false,
+  loading: true,
+  loadingMessages: true,
   error: null,
   conversation: null,
   messages: [],

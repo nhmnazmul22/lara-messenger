@@ -58,7 +58,7 @@ export function UsersList() {
     );
   }
 
-  if (error) {
+  if (!loading && error) {
     return (
       <section
         className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2.5 scrollbar-thin scrollbar-thumb-border
