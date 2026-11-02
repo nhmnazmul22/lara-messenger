@@ -27,9 +27,14 @@ class AuthServices
         ]);
     }
 
-    public function loginUser(array $credentials): bool
+    /**
+     * @throws Exception
+     */
+    public function loginUser(array $credentials): string
     {
-        if (!$token = auth('api')->attempt($credentials)) {
+        $token = auth('api')->attempt($credentials);
+
+        if (!$token) {
             throw new Exception('Invalid credentials');
         }
 
