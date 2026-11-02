@@ -7,54 +7,23 @@ import {
   InputGroupButton,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
-import useConversation from "@/store/useConversation";
-import { sendMessage } from "@/services/message";
-import { toast } from "../ui/toast";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { EmojiPicker } from "@/components/ui/emoji-picker";
+import useComposer from "@/hooks/useComposer";
 
 export function Composer() {
-  const sendingMessage = useConversation((state) => state.sendingMessage);
-  const setSendingMessage = useConversation((state) => state.setSendingMessage);
-  const sendMessageFromData = useConversation(
-    (state) => state.sendMessageFormData,
-  );
-  const setMessagePayload = useConversation((state) => state.setMessagePayload);
-  const resetMessagePayload = useConversation(
-    (state) => state.resetMessagePayload,
-  );
-  const conversation = useConversation((state) => state.conversation);
-
-  const handleMessageSend = async () => {
-    try {
-      setSendingMessage(true);
-      const payload = new FormData();
-
-      payload.append("senderId", String(conversation?.me.id));
-      payload.append("receiverId", String(conversation?.receiver.id));
-      payload.append("conversationId", String(conversation?.id));
-      payload.append("message", sendMessageFromData.message);
-
-      if (sendMessageFromData.attachments?.length) {
-        sendMessageFromData.attachments?.forEach((file) => {
-          payload.append("attachments[]", file);
-        });
-      }
-
-      const result = await sendMessage(payload);
-
-      if (!result.success) {
-        toast.add({
-          type: "error",
-          description: result.message,
-        });
-        return;
-      }
-
-      console.log(result);
-      resetMessagePayload();
-    } finally {
-      setSendingMessage(false);
-    }
-  };
+  const {
+    sendingMessage,
+    sendMessageFromData,
+    setMessagePayload,
+    handleMessageSend,
+    showPicker,
+    setShowPicker,
+  } = useComposer();
 
   return (
     <div className="shrink-0 border-t p-3 sm:p-4">
@@ -67,15 +36,31 @@ export function Composer() {
           value={sendMessageFromData.message}
           onChange={(e) => setMessagePayload("message", e.target.value)}
         />
-        <InputGroupAddon align="inline-end">
-          <InputGroupButton
-            variant="ghost"
-            size="icon-sm"
-            className="rounded-2xl text-muted-foreground"
-            aria-label="Add an emoji"
-          >
-            <SmileIcon />
-          </InputGroupButton>
+        <InputGroupAddon align="inline-end" className="relative">
+          <Popover open={showPicker} onOpenChange={setShowPicker}>
+            <PopoverTrigger
+              render={
+                <InputGroupButton
+                  variant="ghost"
+                  size="icon-sm"
+                  className="rounded-2xl text-muted-foreground"
+                  aria-label="Add an emoji"
+                />
+              }
+            >
+              <SmileIcon />
+            </PopoverTrigger>
+            <PopoverContent side="top" align="end" className="w-auto p-0">
+              <EmojiPicker
+                onEmojiClick={(emojiData) =>
+                  setMessagePayload(
+                    "message",
+                    `${sendMessageFromData.message} ${emojiData.emoji}`,
+                  )
+                }
+              />
+            </PopoverContent>
+          </Popover>
           <InputGroupButton
             variant="ghost"
             size="icon-sm"
