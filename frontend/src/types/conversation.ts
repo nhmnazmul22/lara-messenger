@@ -3,7 +3,7 @@ import { Message, SendMessageFromDataType } from "./message";
 
 export type conversation = {
   id: number;
-  sender: User;
+  me: User;
   receiver: User;
   last_message: Message | null;
   created_at?: Date;

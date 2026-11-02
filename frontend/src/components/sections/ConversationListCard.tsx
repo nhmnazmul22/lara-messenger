@@ -11,7 +11,10 @@ interface ConversationListCardProps {
   active: boolean;
 }
 
-export function ConversationListCard({ conv, active }: ConversationListCardProps) {
+export function ConversationListCard({
+  conv,
+  active,
+}: ConversationListCardProps) {
   const setConversation = useConversation((state) => state.setConversation);
 
   return (
@@ -37,7 +40,7 @@ export function ConversationListCard({ conv, active }: ConversationListCardProps
         </div>
         <div className="mt-0.5 flex items-center justify-between gap-2">
           <p className="truncate text-sm text-muted-foreground">
-            {conv?.last_message_id}
+            {conv?.last_message?.message}
           </p>
         </div>
       </div>

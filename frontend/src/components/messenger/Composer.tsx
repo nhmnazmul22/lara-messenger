@@ -28,7 +28,7 @@ export function Composer() {
       setSendingMessage(true);
       const payload = new FormData();
 
-      payload.append("senderId", String(conversation?.sender.id));
+      payload.append("senderId", String(conversation?.me.id));
       payload.append("receiverId", String(conversation?.receiver.id));
       payload.append("conversationId", String(conversation?.id));
       payload.append("message", sendMessageFromData.message);
