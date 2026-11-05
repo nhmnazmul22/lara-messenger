@@ -1,10 +1,11 @@
 import useConversation from "@/store/useConversation";
 import { sendMessage } from "@/services/message";
 import { toast } from "@/components/ui/toast";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const useComposer = () => {
   const [showPicker, setShowPicker] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const sendingMessage = useConversation((state) => state.sendingMessage);
   const setSendingMessage = useConversation((state) => state.setSendingMessage);
   const sendMessageFromData = useConversation(
@@ -15,6 +16,26 @@ const useComposer = () => {
     (state) => state.resetMessagePayload,
   );
   const conversation = useConversation((state) => state.conversation);
+
+  const handleAttachmentSelect = (files: FileList | null) => {
+    if (!files?.length) {
+      return;
+    }
+
+    setMessagePayload("attachments", [
+      ...(sendMessageFromData.attachments ?? []),
+      ...Array.from(files),
+    ]);
+  };
+
+  const handleAttachmentRemove = (indexToRemove: number) => {
+    setMessagePayload(
+      "attachments",
+      (sendMessageFromData.attachments ?? []).filter(
+        (_, index) => index !== indexToRemove,
+      ),
+    );
+  };
 
   const handleMessageSend = async () => {
     try {
@@ -53,6 +74,9 @@ const useComposer = () => {
     sendingMessage,
     setMessagePayload,
     sendMessageFromData,
+    fileInputRef,
+    handleAttachmentSelect,
+    handleAttachmentRemove,
     showPicker,
     setShowPicker,
 

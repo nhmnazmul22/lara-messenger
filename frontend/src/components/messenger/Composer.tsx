@@ -1,6 +1,12 @@
 "use client";
 
-import { Loader2, PaperclipIcon, SendIcon, SmileIcon } from "lucide-react";
+import {
+  Loader2,
+  PaperclipIcon,
+  SendIcon,
+  SmileIcon,
+  XIcon,
+} from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -21,12 +27,47 @@ export function Composer() {
     sendMessageFromData,
     setMessagePayload,
     handleMessageSend,
+    fileInputRef,
+    handleAttachmentSelect,
+    handleAttachmentRemove,
     showPicker,
     setShowPicker,
   } = useComposer();
 
   return (
     <div className="shrink-0 border-t p-3 sm:p-4">
+      {sendMessageFromData.attachments?.length ? (
+        <div
+          className="mb-3 flex flex-wrap gap-2"
+          role="list"
+          aria-label="Attached files"
+        >
+          {sendMessageFromData.attachments.map((file, index) => (
+            <div
+              key={`${file.name}-${file.lastModified}-${file.size}-${index}`}
+              className="flex max-w-full items-center gap-2 rounded-xl border bg-muted/40 py-1 pl-2.5 pr-1"
+              role="listitem"
+            >
+              <PaperclipIcon
+                className="size-4 shrink-0 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <span className="max-w-48 truncate text-sm" title={file.name}>
+                {file.name}
+              </span>
+              <InputGroupButton
+                variant="ghost"
+                size="icon-xs"
+                className="rounded-full text-muted-foreground"
+                aria-label={`Remove ${file.name}`}
+                onClick={() => handleAttachmentRemove(index)}
+              >
+                <XIcon />
+              </InputGroupButton>
+            </div>
+          ))}
+        </div>
+      ) : null}
       <InputGroup className="min-h-12">
         <InputGroupTextarea
           rows={1}
@@ -66,9 +107,21 @@ export function Composer() {
             size="icon-sm"
             className="rounded-2xl text-muted-foreground"
             aria-label="Attach a file"
+            onClick={() => fileInputRef.current?.click()}
           >
             <PaperclipIcon />
           </InputGroupButton>
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            className="hidden"
+            aria-label="Choose files to attach"
+            onChange={(event) => {
+              handleAttachmentSelect(event.currentTarget.files);
+              event.currentTarget.value = "";
+            }}
+          />
           <InputGroupButton
             variant="default"
             size="icon-sm"
