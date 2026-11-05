@@ -1,5 +1,5 @@
 import { ConversationStore } from "@/types/conversation";
-import { initialMessage } from "@/types/message";
+import { initialMessage, Message } from "@/types/message";
 import { create } from "zustand";
 
 const useConversation = create<ConversationStore>((set) => ({
@@ -49,6 +49,13 @@ const useConversation = create<ConversationStore>((set) => ({
     set({
       messages,
     });
+  },
+  appendMessage: (message: Message) => {
+    set((state) => ({
+      messages: state.messages.some((item) => item.id === message.id)
+        ? state.messages
+        : [...state.messages, message],
+    }));
   },
   setConversations: (conversations) => {
     set({

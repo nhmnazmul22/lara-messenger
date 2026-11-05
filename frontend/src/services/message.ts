@@ -2,6 +2,10 @@ import appConfig from "@/config/app";
 import { Message } from "@/types/message";
 import { getAuthToken } from "@/utils/token";
 
+type SendMessageResult =
+  | { success: true; message: string; data: Message }
+  | { success: false; message: string };
+
 export const getMessagesByConversation = async (conversationId: number) => {
   try {
     const response = await fetch(
@@ -35,7 +39,9 @@ export const getMessagesByConversation = async (conversationId: number) => {
   }
 };
 
-export const sendMessage = async (data: FormData) => {
+export const sendMessage = async (
+  data: FormData,
+): Promise<SendMessageResult> => {
   try {
     const response = await fetch(`${appConfig.BASE_URL}/messages/send`, {
       method: "POST",

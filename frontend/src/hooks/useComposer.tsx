@@ -15,6 +15,7 @@ const useComposer = () => {
   const resetMessagePayload = useConversation(
     (state) => state.resetMessagePayload,
   );
+  const appendMessage = useConversation((state) => state.appendMessage);
   const conversation = useConversation((state) => state.conversation);
 
   const handleAttachmentSelect = (files: FileList | null) => {
@@ -63,7 +64,7 @@ const useComposer = () => {
         return;
       }
 
-      console.log(result);
+      appendMessage(result.data);
       resetMessagePayload();
     } finally {
       setSendingMessage(false);

@@ -30,6 +30,7 @@ export interface ConversationStore {
 
   setConversation: (conversation: conversation) => void;
   setMessages: (messages: Message[]) => void;
+  appendMessage: (message: Message) => void;
   setConversations: (conversations: conversation[]) => void;
   setMessagePayload: <K extends keyof SendMessageFromDataType>(
     key: K,
