@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
-import { getImgUrl } from "@/utils/img";
+import { getImgUrl } from "@/utils/file";
 
 const UserAvatar = ({
   avatar,
