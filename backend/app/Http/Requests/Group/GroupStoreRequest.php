@@ -16,6 +16,7 @@ class GroupStoreRequest extends FormRequest
         return true;
     }
 
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -41,6 +42,7 @@ class GroupStoreRequest extends FormRequest
     {
         $this->merge([
             'ownerId' => auth()->id(),
+            'usersIds' => count($this->usersIds) > 0 ? array_map(fn($id) => (int)$id, $this->usersIds) : null
         ]);
     }
 
