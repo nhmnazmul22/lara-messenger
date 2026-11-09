@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Layers2Icon, MessageSquareIcon, UsersIcon } from "lucide-react";
+import { Layers2Icon, MessageSquareIcon, Plus, UsersIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ConversationsList } from "./ConversationsList";
 import { UsersList } from "./UsersList";
 import { GroupsList } from "./GroupsList";
+import { CreateGroupSheet } from "./CreateGroupSheet";
 import { useSidebar } from "@/contexts/SidebarContext";
 import useUser from "@/store/useUser";
 import useConversation from "@/store/useConversation";
@@ -19,6 +20,7 @@ type SidebarView = "users" | "conversations" | "groups";
 export function SidebarLists() {
   const { showUsers, setShowUsers } = useSidebar();
   const [showGroups, setShowGroups] = useState(false);
+  const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [previousView, setPreviousView] = useState<"users" | "conversations">(
     "users",
   );
@@ -70,14 +72,26 @@ export function SidebarLists() {
           </p>
         </div>
         <div className="flex items-center gap-1">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="rounded-xl text-muted-foreground"
-            onClick={toggleUsersConversations}
-            aria-label={showUsers ? "Show conversations" : "Show users"}
-          >
+          {view === "groups" ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="rounded-xl text-muted-foreground hover:bg-muted"
+              onClick={() => setShowCreateGroup(true)}
+              aria-label="Create group"
+            >
+              <Plus />
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="rounded-xl text-muted-foreground"
+              onClick={toggleUsersConversations}
+              aria-label={showUsers ? "Show conversations" : "Show users"}
+            >
               <span className="relative flex size-4 items-center justify-center">
                 <MessageSquareIcon
                   aria-hidden
@@ -95,6 +109,7 @@ export function SidebarLists() {
                 />
               </span>
             </Button>
+          )}
           <Button
             type="button"
             variant="ghost"
@@ -136,6 +151,11 @@ export function SidebarLists() {
           <GroupsList />
         )}
       </div>
+
+      <CreateGroupSheet
+        open={showCreateGroup}
+        onClose={() => setShowCreateGroup(false)}
+      />
     </div>
   );
 }

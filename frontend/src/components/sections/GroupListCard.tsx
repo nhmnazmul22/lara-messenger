@@ -4,6 +4,7 @@ import { Group } from "@/types/group";
 interface GroupListCardProps {
   group: Group;
 }
+
 export default function GroupListCard({ group }: GroupListCardProps) {
   return (
     <div
@@ -11,7 +12,7 @@ export default function GroupListCard({ group }: GroupListCardProps) {
     >
       <div className="flex items-center gap-2">
         <UserAvatar
-          avatar={group.logo ?? ""}
+          avatar={group.owner.avatar}
           alt={group.name}
           fallback={group.name[0]}
         />
