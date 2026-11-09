@@ -4,29 +4,32 @@ namespace App\Services;
 
 use App\Models\Group;
 use App\Repository\GroupRepository;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
 
 class GroupService
 {
 
-    public function __construct(protected GroupRepository $groupRepository)
-    {
-    }
+    public function __construct(protected GroupRepository $groupRepository) {}
 
     public function groupCollection(): Collection
     {
         return $this->groupRepository->getAllGroups();
     }
 
-    public function createNewGroup(array $attributes): Group
+    public function createNewGroup(array $attributes, ?UploadedFile $logo = null): Group
     {
+        if ($logo) {
+            $logoPath = $logo->store('group_logo', 'public');
+        }
 
         // create a new group
         $group = $this->groupRepository->createGroup([
             'name' => $attributes['name'],
             'description' => $attributes['description'],
-            'owner_id' => $attributes['ownerId']
+            'owner_id' => $attributes['ownerId'],
+            'logo' => $logoPath ?? null,
         ]);
 
         // attach all users
@@ -36,6 +39,4 @@ class GroupService
 
         return $group->load(['owner', 'users']);
     }
-
 }
-

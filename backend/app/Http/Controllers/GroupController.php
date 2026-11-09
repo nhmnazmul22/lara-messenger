@@ -28,7 +28,7 @@ class GroupController extends Controller
 
     public function store(GroupStoreRequest $request)
     {
-        $result = $this->service->createNewGroup($request->validated());
+        $result = $this->service->createNewGroup($request->validated(), $request->file('logo'));
 
         return $this->sendSuccessResponse(
             'Group created successfully',
