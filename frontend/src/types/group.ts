@@ -7,3 +7,13 @@ export interface Group {
   logo: string | null;
   owner: User;
 }
+
+export interface GroupStore {
+  groupsLoading: boolean;
+  groups: Group[];
+  error: string | null;
+
+  setGroups: (groups: Group[]) => void;
+  setGroupLoading: (groupsLoading: boolean) => void;
+  setGroupError: (error: string | null) => void;
+}

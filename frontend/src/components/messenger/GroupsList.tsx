@@ -1,75 +1,82 @@
-import { Group } from "@/types/group";
-import GroupListCard from "@/components/sections/GroupListCard";
+"use client";
 
-const GROUPS: Group[] = [
-  {
-    id: 1,
-    name: "Development Team",
-    description: "A group for developers to discuss projects and share updates.",
-    logo: null,
-    owner: {
-      id: 1,
-      name: "Nazmul Hasan",
-      email: "nhmnazmul87@gmail.com",
-      avatar: "avatars/yuyl3nurTPvUcKa4tFSOjug03AMgABt4Vencf1jY.png",
-      email_verified_at: null,
-      is_admin: false,
-      blocked_at: null,
-      created_at: new Date("2026-09-24T13:45:16.000000Z"),
-      updated_at: new Date("2026-09-24T13:45:16.000000Z"),
-    },
-    created_at: new Date("2026-11-09T16:30:00.000000Z"),
-    updated_at: new Date("2026-11-09T16:30:00.000000Z"),
-  },
-  {
-    id: 2,
-    name: "Design Collective",
-    description: "UI/UX designers sharing mockups and feedback.",
-    logo: null,
-    owner: {
-      id: 2,
-      name: "Sarah Johnson",
-      email: "sarah.johnson@example.com",
-      avatar: "",
-      email_verified_at: null,
-      is_admin: false,
-      blocked_at: null,
-      created_at: new Date("2026-11-08T10:15:00.000000Z"),
-      updated_at: new Date("2026-11-08T10:15:00.000000Z"),
-    },
-    created_at: new Date("2026-11-08T10:15:00.000000Z"),
-    updated_at: new Date("2026-11-08T10:15:00.000000Z"),
-  },
-  {
-    id: 3,
-    name: "Product Circle",
-    description: "Roadmap discussions and feature planning for upcoming releases.",
-    logo: null,
-    owner: {
-      id: 3,
-      name: "Mike Chen",
-      email: "mike.chen@example.com",
-      avatar: "",
-      email_verified_at: null,
-      is_admin: false,
-      blocked_at: null,
-      created_at: new Date("2026-11-07T14:20:00.000000Z"),
-      updated_at: new Date("2026-11-07T14:20:00.000000Z"),
-    },
-    created_at: new Date("2026-11-07T14:20:00.000000Z"),
-    updated_at: new Date("2026-11-07T14:20:00.000000Z"),
-  },
-];
+import { useEffect } from "react";
+import  GroupListCard from "@/components/sections/GroupListCard";
+import { Group } from "@/types/group";
+import { getAllGroups } from "@/services/gruop";
+import useGroup from "@/store/useGroup";
 
 export function GroupsList() {
+  const groups = useGroup((state) => state.groups);
+  const loading = useGroup((state) => state.groupsLoading);
+  const error = useGroup((state) => state.error);
+  const setGroups = useGroup((state) => state.setGroups);
+  const setLoading = useGroup((state) => state.setGroupLoading);
+  const setError = useGroup((state) => state.setGroupError);
+
+  const fetchGroups = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const result = await getAllGroups();
+      if (!result.success) {
+        setError(result.message ?? "Failed to load groups");
+        return;
+      }
+      setGroups(result.data ?? []);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!groups.length && !loading) {
+      void fetchGroups();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groups.length, loading]);
+
+  if (loading) {
+    return (
+      <section
+        className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2.5 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent scrollbar-gutter-stable"
+        aria-label="Groups"
+      >
+        <div className="animate-pulse flex items-center gap-3 p-4">
+          <span className="h-8 w-20 rounded-full bg-muted/50" />
+          <span className="h-8 w-8 rounded-full bg-muted/50" />
+        </div>
+      </section>
+    );
+  }
+
+  if (!loading && error) {
+    return (
+      <section
+        className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2.5 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent scrollbar-gutter-stable"
+        aria-label="Groups"
+      >
+        <div className="flex flex-col items-center justify-center py-10 text-center">
+          <p className="text-sm text-destructive">{error}</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2.5 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent scrollbar-gutter-stable"
       aria-label="Groups"
     >
-      {GROUPS.map((group) => (
-        <GroupListCard key={group.id} group={group} />
-      ))}
+      {groups.length ? (
+        groups.map((group: Group) => (
+          <GroupListCard key={group.id} group={group} />
+        ))
+      ) : (
+        <div className="flex flex-col items-center justify-center py-10 text-center">
+          <p className="text-sm text-muted-foreground">No groups found</p>
+        </div>
+      )}
     </section>
   );
 }
