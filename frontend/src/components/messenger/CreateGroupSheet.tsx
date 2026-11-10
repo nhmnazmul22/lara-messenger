@@ -7,9 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import UserAvatar from "@/components/common/UserAvatar";
+import useGroup from "@/store/useGroup";
 import useUser from "@/store/useUser";
+import { createNewGroup } from "@/services/gruop";
+import { toast } from "@/components/ui/toast";
 
 interface CreateGroupSheetProps {
   open: boolean;
@@ -17,6 +25,7 @@ interface CreateGroupSheetProps {
 }
 
 export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
+  const setLoading = useGroup((state) => state.setGroupLoading);
   const users = useUser((state) => state.users);
   const [name, setName] = useState("New group");
   const [description, setDescription] = useState("");
@@ -36,8 +45,49 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
     }
   };
 
+  const handleSubmit = async () => {
+    {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+
+      if (selectedUserIds.length) {
+        selectedUserIds.forEach((id) => {
+          formData.append("users_ids[]", String(id));
+        });
+      }
+
+      setLoading(true);
+      try {
+        const result = await createNewGroup(formData);
+        if (!result.success) {
+          toast.add({ type: "error", description: result.message });
+          return;
+        }
+        toast.add({
+          type: "success",
+          description: result.message,
+        });
+        onClose();
+      } catch (err) {
+        toast.add({
+          type: "error",
+          description:
+            err instanceof Error ? err.message : "Failed to create group",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   return (
-    <Sheet open={open} onOpenChange={(next) => { if (!next) onClose(); }}>
+    <Sheet
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) onClose();
+      }}
+    >
       <SheetContent
         side="right"
         className="w-full sm:w-110 sm:max-w-none"
@@ -60,10 +110,14 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
                   className="sr-only"
                   onChange={handleLogoChange}
                 />
-                <Button variant="outline" size="sm" onClick={() => {
-                  const input = document.getElementById("group-logo-input");
-                  if (input) input.click();
-                }}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const input = document.getElementById("group-logo-input");
+                    if (input) input.click();
+                  }}
+                >
                   {logoUrl ? "Change logo" : "Upload logo"}
                 </Button>
                 {logoUrl && (
@@ -136,11 +190,7 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
           <Button variant="outline" size="sm" onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            size="sm"
-            disabled={!name.trim()}
-            onClick={() => {}}
-          >
+          <Button size="sm" disabled={!name.trim()} onClick={handleSubmit}>
             Create group
           </Button>
         </div>
