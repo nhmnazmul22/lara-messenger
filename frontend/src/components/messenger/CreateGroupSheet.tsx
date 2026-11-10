@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Image as ImageIcon, Plus as PlusIcon } from "lucide-react";
+import { Image as ImageIcon, Plus as PlusIcon, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +19,7 @@ import useUser from "@/store/useUser";
 import { createNewGroup } from "@/services/gruop";
 import { getUsers } from "@/services/users";
 import { toast } from "@/components/ui/toast";
+import Image from "next/image";
 
 interface CreateGroupSheetProps {
   open: boolean;
@@ -54,6 +55,7 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
     const file = e.target.files?.[0];
     if (file) {
       setLogoFile(file);
+      console.log(URL.createObjectURL(file));
       setLogoUrl(URL.createObjectURL(file));
     }
   };
@@ -129,7 +131,10 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
                   className="sr-only"
                   onChange={handleLogoChange}
                 />
-                <label className="flex flex-col items-center gap-1 cursor-pointer">
+                <label
+                  htmlFor="group-logo-input"
+                  className="flex flex-col items-center gap-1 cursor-pointer"
+                >
                   <PlusIcon className="size-4 text-muted-foreground group-hover:text-primary" />
                   <span className="text-xs text-muted-foreground group-hover:text-primary">
                     {logoUrl ? "Change logo" : "Upload group logo"}
@@ -137,10 +142,12 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
                 </label>
                 {logoUrl && (
                   <div className="relative shrink-0 w-20 h-20 rounded-full overflow-hidden border border-border">
-                    <ReusableImage
-                      avatar={logoUrl}
+                    <Image
+                      src={logoUrl}
                       alt={name}
-                      fallback={name[0]}
+                      width={600}
+                      height={600}
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 )}
@@ -151,7 +158,7 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
                     className="absolute -top-1 -right-1 p-1.5 rounded-full bg-background hover:bg-red-50 text-red-600 hover:text-red-800 transition-colors"
                     aria-label="Remove logo"
                   >
-                    <ImageIcon className="size-3" />
+                    <X className="size-3" />
                   </button>
                 )}
               </div>
@@ -219,11 +226,7 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
           <Button variant="outline" size="sm" onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            size="sm"
-            disabled={!name.trim()}
-            onClick={handleSubmit}
-          >
+          <Button size="sm" disabled={!name.trim()} onClick={handleSubmit}>
             Create group
           </Button>
         </div>

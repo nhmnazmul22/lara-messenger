@@ -10,6 +10,7 @@ export const createNewGroup = async (data: FormData) => {
       headers: {
         // "Content-type": "multipart/form-data",
         Accept: "application/json",
+        Authorization: `Bearer ${getAuthToken()}`,
       },
     });
 
