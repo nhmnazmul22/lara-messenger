@@ -42,7 +42,7 @@ class GroupStoreRequest extends FormRequest
     {
         $this->merge([
             'ownerId' => auth()->id(),
-            'usersIds' => count($this->usersIds) > 0 ? array_map(fn($id) => (int)$id, $this->usersIds) : null
+            'usersIds' => $this->usersIds && count($this->usersIds) > 0 ? array_map(fn($id) => (int)$id, $this->usersIds) : null
         ]);
     }
 
