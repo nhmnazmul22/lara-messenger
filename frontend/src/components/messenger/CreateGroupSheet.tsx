@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Image as ImageIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Image as ImageIcon, Plus as PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,10 +13,11 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import UserAvatar from "@/components/common/UserAvatar";
+import ReusableImage from "@/components/common/ReusableImage";
 import useGroup from "@/store/useGroup";
 import useUser from "@/store/useUser";
 import { createNewGroup } from "@/services/gruop";
+import { getUsers } from "@/services/users";
 import { toast } from "@/components/ui/toast";
 
 interface CreateGroupSheetProps {
@@ -30,7 +31,18 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
   const [name, setName] = useState("New group");
   const [description, setDescription] = useState("");
   const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!users.length) {
+      void getUsers().then((res: any) => {
+        if (res?.data) {
+          useUser.getState().setUsers(res.data);
+        }
+      });
+    }
+  }, [users.length]);
 
   const toggleUser = (id: number) => {
     setSelectedUserIds((prev) =>
@@ -41,43 +53,50 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setLogoFile(file);
       setLogoUrl(URL.createObjectURL(file));
     }
   };
 
+  const removeLogo = () => {
+    if (logoUrl) URL.revokeObjectURL(logoUrl);
+    setLogoFile(null);
+    setLogoUrl(null);
+  };
+
   const handleSubmit = async () => {
-    {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("description", description);
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
 
-      if (selectedUserIds.length) {
-        selectedUserIds.forEach((id) => {
-          formData.append("users_ids[]", String(id));
-        });
-      }
+    if (logoFile) {
+      formData.append("logo", logoFile);
+    }
 
-      setLoading(true);
-      try {
-        const result = await createNewGroup(formData);
-        if (!result.success) {
-          toast.add({ type: "error", description: result.message });
-          return;
-        }
-        toast.add({
-          type: "success",
-          description: result.message,
-        });
-        onClose();
-      } catch (err) {
-        toast.add({
-          type: "error",
-          description:
-            err instanceof Error ? err.message : "Failed to create group",
-        });
-      } finally {
-        setLoading(false);
+    selectedUserIds.forEach((id) => {
+      formData.append("users_ids[]", String(id));
+    });
+
+    setLoading(true);
+    try {
+      const result = await createNewGroup(formData);
+      if (!result.success) {
+        toast.add({ type: "error", description: result.message });
+        return;
       }
+      toast.add({
+        type: "success",
+        description: result.message,
+      });
+      onClose();
+    } catch (err) {
+      toast.add({
+        type: "error",
+        description:
+          err instanceof Error ? err.message : "Failed to create group",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,7 +121,7 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
           <div className="space-y-6">
             <div className="space-y-2">
               <Label className="block">Group logo</Label>
-              <div className="relative inline-block">
+              <div className="relative flex flex-col items-center gap-2 p-3 rounded-2xl border border-dashed border-border bg-muted/50 hover:bg-muted/80 transition-colors cursor-pointer group">
                 <input
                   id="group-logo-input"
                   type="file"
@@ -110,37 +129,30 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
                   className="sr-only"
                   onChange={handleLogoChange}
                 />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    const input = document.getElementById("group-logo-input");
-                    if (input) input.click();
-                  }}
-                >
-                  {logoUrl ? "Change logo" : "Upload logo"}
-                </Button>
+                <label className="flex flex-col items-center gap-1 cursor-pointer">
+                  <PlusIcon className="size-4 text-muted-foreground group-hover:text-primary" />
+                  <span className="text-xs text-muted-foreground group-hover:text-primary">
+                    {logoUrl ? "Change logo" : "Upload group logo"}
+                  </span>
+                </label>
                 {logoUrl && (
-                  <div className="absolute top-0 right-0 mt-1 mr-1">
-                    <button
-                      type="button"
-                      onClick={() => setLogoUrl(null)}
-                      className="p-1 rounded-full hover:bg-muted text-foreground"
-                    >
-                      <ImageIcon className="size-3" />
-                    </button>
+                  <div className="relative shrink-0 w-20 h-20 rounded-full overflow-hidden border border-border">
+                    <ReusableImage
+                      avatar={logoUrl}
+                      alt={name}
+                      fallback={name[0]}
+                    />
                   </div>
                 )}
                 {logoUrl && (
-                  <div className="mt-3 flex items-center gap-3">
-                    <div className="flex shrink-0">
-                      <UserAvatar
-                        avatar={logoUrl}
-                        alt={name}
-                        fallback={name[0]}
-                      />
-                    </div>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={removeLogo}
+                    className="absolute -top-1 -right-1 p-1.5 rounded-full bg-background hover:bg-red-50 text-red-600 hover:text-red-800 transition-colors"
+                    aria-label="Remove logo"
+                  >
+                    <ImageIcon className="size-3" />
+                  </button>
                 )}
               </div>
             </div>
@@ -161,28 +173,45 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label className="block">Add members</Label>
-              <div className="mt-2 space-y-1">
-                {users.map((user) => (
-                  <Label
-                    key={user.id}
-                    className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-xl hover:bg-muted/50"
-                  >
-                    <Checkbox
-                      checked={selectedUserIds.includes(user.id)}
-                      onCheckedChange={() => toggleUser(user.id)}
-                    />
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold truncate">
-                        {user.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground truncate">
-                        {user.email}
-                      </p>
-                    </div>
-                  </Label>
-                ))}
+              <div className="flex items-center justify-between">
+                <Label className="block">Add members</Label>
+                <span className="text-xs text-muted-foreground">
+                  {selectedUserIds.length} selected
+                </span>
               </div>
+              {users.length ? (
+                <div className="mt-2 space-y-1 max-h-64 overflow-y-auto">
+                  {users.map((user) => (
+                    <Label
+                      key={user.id}
+                      className="flex items-center gap-3 cursor-pointer select-none p-2 rounded-xl hover:bg-muted/50"
+                    >
+                      <Checkbox
+                        checked={selectedUserIds.includes(user.id)}
+                        onCheckedChange={() => toggleUser(user.id)}
+                      />
+                      <ReusableImage
+                        avatar={user.avatar}
+                        alt={user.name}
+                        fallback={user.name[0]}
+                        className="size-8 shrink-0"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold truncate">
+                          {user.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {user.email}
+                        </p>
+                      </div>
+                    </Label>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-2 p-3 rounded-xl bg-muted/50 text-center text-sm text-muted-foreground">
+                  No users available to add
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -190,7 +219,11 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
           <Button variant="outline" size="sm" onClick={onClose}>
             Cancel
           </Button>
-          <Button size="sm" disabled={!name.trim()} onClick={handleSubmit}>
+          <Button
+            size="sm"
+            disabled={!name.trim()}
+            onClick={handleSubmit}
+          >
             Create group
           </Button>
         </div>
