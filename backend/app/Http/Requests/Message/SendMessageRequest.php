@@ -24,8 +24,8 @@ class SendMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'senderId' => ['required','int', 'exists:users,id'],
-            'receiverId' => ['required','int', 'exists:users,id'],
+            'senderId' => ['required', 'int', 'exists:users,id'],
+            'receiverId' => ['required_with:conversationId', 'int', 'exists:users,id'],
             'conversationId' => [
                 'required_without:groupId',
                 'int',
@@ -35,7 +35,7 @@ class SendMessageRequest extends FormRequest
                     $this->input('receiverId'),
                 ),
             ],
-            'groupId' => ['required_without:conversationId','int', 'exists:groups,id'],
+            'groupId' => ['required_without:conversationId', 'int', 'exists:groups,id'],
             'message' => ['nullable', 'string',],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => [
