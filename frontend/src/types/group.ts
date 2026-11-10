@@ -16,4 +16,5 @@ export interface GroupStore {
   setGroups: (groups: Group[]) => void;
   setGroupLoading: (groupsLoading: boolean) => void;
   setGroupError: (error: string | null) => void;
+  fetchGroups: () => Promise<void>;
 }

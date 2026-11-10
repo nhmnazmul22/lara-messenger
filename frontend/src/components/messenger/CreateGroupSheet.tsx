@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Image as ImageIcon, Plus as PlusIcon, X } from "lucide-react";
+import {
+  Plus as PlusIcon,
+  Loader2,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,7 +31,9 @@ interface CreateGroupSheetProps {
 }
 
 export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
+  const groupsLoading = useGroup((state) => state.groupsLoading);
   const setLoading = useGroup((state) => state.setGroupLoading);
+  const fetchGroups = useGroup((state) => state.fetchGroups);
   const users = useUser((state) => state.users);
   const [name, setName] = useState("New group");
   const [description, setDescription] = useState("");
@@ -90,6 +96,7 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
         type: "success",
         description: result.message,
       });
+      await fetchGroups();
       onClose();
     } catch (err) {
       toast.add({
@@ -226,8 +233,16 @@ export function CreateGroupSheet({ open, onClose }: CreateGroupSheetProps) {
           <Button variant="outline" size="sm" onClick={onClose}>
             Cancel
           </Button>
-          <Button size="sm" disabled={!name.trim()} onClick={handleSubmit}>
-            Create group
+          <Button
+            size="sm"
+            disabled={!name.trim() || groupsLoading}
+            onClick={handleSubmit}
+          >
+            {groupsLoading ? (
+              <Loader2 className="animate-spin size-4" />
+            ) : (
+              "Create group"
+            )}
           </Button>
         </div>
       </SheetContent>

@@ -1,33 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-import  GroupListCard from "@/components/sections/GroupListCard";
+import GroupListCard from "@/components/sections/GroupListCard";
 import { Group } from "@/types/group";
-import { getAllGroups } from "@/services/gruop";
 import useGroup from "@/store/useGroup";
 
 export function GroupsList() {
   const groups = useGroup((state) => state.groups);
   const loading = useGroup((state) => state.groupsLoading);
   const error = useGroup((state) => state.error);
-  const setGroups = useGroup((state) => state.setGroups);
-  const setLoading = useGroup((state) => state.setGroupLoading);
-  const setError = useGroup((state) => state.setGroupError);
-
-  const fetchGroups = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const result = await getAllGroups();
-      if (!result.success) {
-        setError(result.message ?? "Failed to load groups");
-        return;
-      }
-      setGroups(result.data ?? []);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchGroups = useGroup((state) => state.fetchGroups);
 
   useEffect(() => {
     if (!groups.length && !loading) {
