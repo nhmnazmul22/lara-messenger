@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import UserAvatar from "../common/UserAvatar";
+import ReusableImage from "../common/ReusableImage";
 import { formatDateTime } from "@/utils/date";
 import { conversation } from "@/types/conversation";
 import useConversation from "@/store/useConversation";
@@ -27,7 +27,7 @@ export function ConversationListCard({
       )}
       onClick={() => setConversation(conv)}
     >
-      <UserAvatar
+      <ReusableImage
         avatar={conv.receiver.avatar}
         fallback={conv.receiver.name[0]}
       />

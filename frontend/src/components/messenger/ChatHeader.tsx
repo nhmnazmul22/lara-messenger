@@ -1,13 +1,13 @@
 import { MoreVerticalIcon, SearchIcon, VideoIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import UserAvatar from "../common/UserAvatar";
+import ReusableImage from "../common/ReusableImage";
 import { conversation } from "@/types/conversation";
 
 export function ChatHeader({ conversation }: { conversation: conversation }) {
   return (
     <div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b px-3 sm:px-4">
       <div className="flex min-w-0 items-center gap-3">
-        <UserAvatar
+        <ReusableImage
           avatar={conversation.receiver.avatar}
           alt={conversation.receiver.name}
           fallback={conversation.receiver.name[0]}

@@ -8,7 +8,7 @@ import { startConversation } from "@/services/conversation";
 import { toast } from "../ui/toast";
 import { conversation } from "@/types/conversation";
 import { useSidebar } from "@/contexts/SidebarContext";
-import UserAvatar from "../common/UserAvatar";
+import ReusableImage from "../common/ReusableImage";
 
 const UserListCard = ({ user }: { user: User }) => {
   const setConversation = useConversation((state) => state.setConversation);
@@ -43,7 +43,7 @@ const UserListCard = ({ user }: { user: User }) => {
       onClick={handleStartConversation}
     >
       <div className="flex items-center gap-2">
-        <UserAvatar
+        <ReusableImage
           avatar={user.avatar}
           alt={user.name}
           fallback={user.name[0]}

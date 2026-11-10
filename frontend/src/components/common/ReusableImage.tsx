@@ -2,17 +2,19 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Image from "next/image";
 import { getImgUrl } from "@/utils/file";
 
-const UserAvatar = ({
+const ReusableImage = ({
   avatar,
   alt = "Avatar Image",
   fallback = "F",
+  className = "shrink-0",
 }: {
   avatar: string;
   alt?: string;
   fallback?: string;
+  className?: string;
 }) => {
   return (
-    <Avatar size="lg" className="shrink-0">
+    <Avatar size="lg" className={className}>
       {avatar ? (
         <Image
           src={getImgUrl(avatar) ?? ""}
@@ -30,4 +32,4 @@ const UserAvatar = ({
   );
 };
 
-export default UserAvatar;
+export default ReusableImage;

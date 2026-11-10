@@ -28,7 +28,7 @@ import {
 import { Message as MessageType } from "@/types/message";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatDateTime } from "@/utils/date";
-import UserAvatar from "../common/UserAvatar";
+import ReusableImage from "../common/ReusableImage";
 import useConversation from "@/store/useConversation";
 import { MessagesSkeleton } from "@/components/skeleton/MessagesSkeleton";
 import { Error } from "../common/error";
@@ -73,7 +73,7 @@ function MessageBubble({ message }: { message: MessageType }) {
     <Message align={isMe ? "end" : "start"}>
       {!isMe && (
         <MessageAvatar>
-          <UserAvatar
+          <ReusableImage
             avatar={message.sender.avatar}
             alt={message.sender.name}
             fallback={message.sender.name[0]}
