@@ -29,13 +29,6 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/{conversation}', [MessageController::class, 'conversationMessages'])->name('messages');
     });
 
-    Route::prefix('/groups')->as('.groups')->group(function () {
-        Route::apiResource('/', GroupController::class)
-            ->only(['index', 'store', 'show', 'destroy']);
-
-        Route::patch('/add-member/{group}', [GroupController::class, 'addMember'])
-            ->name('add-member');
-    });
-
-
+    Route::apiResource('/groups', GroupController::class);
+    Route::patch('/groups/add-member/{group}', [GroupController::class, 'addMember'])->name('addMember');
 });
