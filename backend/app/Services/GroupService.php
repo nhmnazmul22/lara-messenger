@@ -34,7 +34,7 @@ class GroupService
 
         // attach all users
         if (isset($attributes['usersIds'])) {
-            $group->users()->syncWithoutDetaching($attributes['usersIds']);
+            $group->users()->syncWithoutDetaching([...$attributes['usersIds'], auth()->id()]);
         }
 
         return $group->load(['owner', 'users']);

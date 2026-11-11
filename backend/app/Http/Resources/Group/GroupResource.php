@@ -22,6 +22,10 @@ class GroupResource extends JsonResource
             'description' => $this->resource->description,
             'logo' => $this->resource->logo,
             'owner' => $this->whenLoaded('owner', new UserResource($this->resource->owner)),
+            'me' => $this->when(
+                auth()->check(),
+                fn() => new UserResource(auth()->user())
+            ),
             'users' => $this->whenLoaded('users', UserResource::collection($this->resource->users)),
             'messages' => $this->whenLoaded('messages', MessageResource::collection($this->resource->messages)),
             'last_message_id' => $this->resource->last_message_id,

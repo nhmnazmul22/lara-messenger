@@ -5,6 +5,7 @@ namespace App\Http\Requests\Message;
 use App\Rules\ConversationParticipants;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class SendMessageRequest extends FormRequest
 {
@@ -30,9 +31,12 @@ class SendMessageRequest extends FormRequest
                 'required_without:groupId',
                 'int',
                 'exists:conversations,id',
-                new ConversationParticipants(
-                    $this->input('senderId'),
-                    $this->input('receiverId'),
+                Rule::when(
+                    $this->filled('conversationId'),
+                    fn() => new ConversationParticipants(
+                        (int) $this->input('senderId'),
+                        (int) $this->input('receiverId'),
+                    )
                 ),
             ],
             'groupId' => ['required_without:conversationId', 'int', 'exists:groups,id'],
