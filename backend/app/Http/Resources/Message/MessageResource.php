@@ -22,7 +22,7 @@ class MessageResource extends JsonResource
             'sender' => $this->whenLoaded('sender', new MinifiedUserResource($this->resource->sender)),
             'receiver' => $this->whenLoaded('receiver', new MinifiedUserResource($this->resource->receiver)),
             'group' => $this->whenLoaded('group', new MinifiedGroupResource($this->resource->group)),
-            'conversation_id' => $this->resource->conversation_id,
+            'conversation_id' => $this->resource->conversation_id ?? null,
             'attachments' => $this->whenLoaded('attachments', $this->resource->attachments),
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,

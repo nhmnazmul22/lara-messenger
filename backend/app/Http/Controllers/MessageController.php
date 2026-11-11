@@ -6,6 +6,7 @@ use App\Http\Requests\Message\SendMessageRequest;
 use App\Http\Resources\Message\MessageResource;
 use App\Http\Resources\Message\PaginatedMessageResource;
 use App\Models\Conversation;
+use App\Models\Group;
 use App\Services\MessageService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,17 @@ class MessageController extends Controller
     public function conversationMessages(Request $request, Conversation $conversation)
     {
         $messages = $this->messageService->getConversationMessages($conversation);
+
+        return (new PaginatedMessageResource($messages))
+            ->additional([
+                'success' => true,
+                'message' => 'Messages retrieved successfully',
+            ]);
+    }
+
+    public function groupMessages(Request $request, Group $group)
+    {
+        $messages = $this->messageService->getGroupMessages($group);
 
         return (new PaginatedMessageResource($messages))
             ->additional([

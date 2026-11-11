@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Conversation;
+use App\Models\Group;
 use App\Models\Message;
 use App\Repository\MessageRepository;
 use Illuminate\Http\UploadedFile;
@@ -92,5 +93,9 @@ class MessageService
     {
         return $this->messageRepository->findConversationMessages($conversation->id);
     }
-}
 
+    public function getGroupMessages(Group $group)
+    {
+        return $this->messageRepository->findGroupMessages($group->id);
+    }
+}
