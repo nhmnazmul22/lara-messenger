@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Layers2Icon, MessageSquareIcon, Plus, UsersIcon } from "lucide-react";
+import {
+  Layers2Icon,
+  MessageSquareIcon,
+  Plus,
+  UsersIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ConversationsList } from "./ConversationsList";
@@ -11,6 +16,7 @@ import { CreateGroupSheet } from "./CreateGroupSheet";
 import { useSidebar } from "@/contexts/SidebarContext";
 import useUser from "@/store/useUser";
 import useConversation from "@/store/useConversation";
+import useGroup from "@/store/useGroup";
 
 const iconTransition =
   "absolute transition-opacity transition-transform duration-200 ease-[cubic-bezier(0.2,0,0,1)]";
@@ -19,6 +25,7 @@ type SidebarView = "users" | "conversations" | "groups";
 
 export function SidebarLists() {
   const { showUsers, setShowUsers } = useSidebar();
+  const setActiveGroup = useGroup((state) => state.setActiveGroup);
   const [showGroups, setShowGroups] = useState(false);
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [previousView, setPreviousView] = useState<"users" | "conversations">(
@@ -31,10 +38,10 @@ export function SidebarLists() {
   const setConversation = useConversation((state) => state.setConversation);
 
   useEffect(() => {
-    if (!conversation && conversations.length > 0) {
+    if (!conversation && conversations.length > 0 && !showGroups) {
       setConversation(conversations[0]);
     }
-  }, [conversation, conversations, setConversation]);
+  }, [conversation, conversations, setConversation, showGroups]);
 
   const view: SidebarView = showGroups
     ? "groups"
@@ -47,12 +54,18 @@ export function SidebarLists() {
     setShowGroups(true);
   };
 
-  const closeGroups = () => setShowGroups(false);
+  const closeGroups = () => {
+    setShowGroups(false);
+    setActiveGroup(null);
+  };
 
   const toggleUsersConversations = () => {
     if (showGroups) {
+      setShowGroups(false);
+      setActiveGroup(null);
       return;
     }
+    setActiveGroup(null);
     setShowUsers((current) => !current);
   };
 

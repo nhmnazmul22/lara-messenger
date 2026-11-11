@@ -12,9 +12,11 @@ export interface GroupStore {
   groupsLoading: boolean;
   groups: Group[];
   error: string | null;
+  activeGroup: Group | null;
 
   setGroups: (groups: Group[]) => void;
   setGroupLoading: (groupsLoading: boolean) => void;
   setGroupError: (error: string | null) => void;
+  setActiveGroup: (group: Group | null) => void;
   fetchGroups: () => Promise<void>;
 }

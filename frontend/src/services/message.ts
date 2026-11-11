@@ -39,6 +39,39 @@ export const getMessagesByConversation = async (conversationId: number) => {
   }
 };
 
+export const getMessagesByGroup = async (groupId: number) => {
+  try {
+    const response = await fetch(
+      `${appConfig.BASE_URL}/messages/group/${groupId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+      },
+    );
+
+    const result = await response.json();
+
+    if (!result?.success) {
+      throw new Error(result?.message || "Group messages fetch filed");
+    }
+    return {
+      success: true,
+      message: result?.message ?? "Group messages fetch successful",
+      data: result.data as Message[],
+      meta: result?.meta ?? null,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Error ? err.message : "Group messages fetch filed",
+    };
+  }
+};
+
 export const sendMessage = async (
   data: FormData,
 ): Promise<SendMessageResult> => {

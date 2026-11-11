@@ -6,6 +6,7 @@ const useGroup = create<GroupStore>((set) => ({
   groupsLoading: false,
   groups: [],
   error: null,
+  activeGroup: null,
 
   setGroups: (groups) => {
     set({ groups });
@@ -15,6 +16,9 @@ const useGroup = create<GroupStore>((set) => ({
   },
   setGroupError: (error) => {
     set({ error });
+  },
+  setActiveGroup: (group) => {
+    set({ activeGroup: group });
   },
   fetchGroups: async () => {
     set({ groupsLoading: true, error: null });

@@ -1,4 +1,5 @@
 import useConversation from "@/store/useConversation";
+import useGroup from "@/store/useGroup";
 import { sendMessage } from "@/services/message";
 import { toast } from "@/components/ui/toast";
 import { useRef, useState } from "react";
@@ -17,6 +18,7 @@ const useComposer = () => {
   );
   const appendMessage = useConversation((state) => state.appendMessage);
   const conversation = useConversation((state) => state.conversation);
+  const activeGroup = useGroup((state) => state.activeGroup);
 
   const handleAttachmentSelect = (files: FileList | null) => {
     if (!files?.length) {
@@ -44,9 +46,14 @@ const useComposer = () => {
       const payload = new FormData();
 
       payload.append("senderId", String(conversation?.me.id));
-      payload.append("receiverId", String(conversation?.receiver.id));
-      payload.append("conversationId", String(conversation?.id));
       payload.append("message", sendMessageFromData.message);
+
+      if (activeGroup) {
+        payload.append("groupId", String(activeGroup.id));
+      } else {
+        payload.append("receiverId", String(conversation?.receiver.id));
+        payload.append("conversationId", String(conversation?.id));
+      }
 
       if (sendMessageFromData.attachments?.length) {
         sendMessageFromData.attachments?.forEach((file) => {
