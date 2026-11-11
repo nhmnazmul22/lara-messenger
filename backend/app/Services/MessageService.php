@@ -35,7 +35,7 @@ class MessageService
                 // Create the message first
                 $message = $this->messageRepository->saveMessage([
                     'sender_id' => $attributes['senderId'],
-                    'receiver_id' => $attributes['receiverId'],
+                    'receiver_id' => $attributes['receiverId'] ?? null,
                     'conversation_id' => $attributes['conversationId'] ?? null,
                     'group_id' => $attributes['groupId'] ?? null,
                     'message' => $attributes['message'],
