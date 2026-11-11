@@ -9,9 +9,11 @@ import { toast } from "../ui/toast";
 import { conversation } from "@/types/conversation";
 import { useSidebar } from "@/contexts/SidebarContext";
 import ReusableImage from "../common/ReusableImage";
+import useGroup from "@/store/useGroup";
 
 const UserListCard = ({ user }: { user: User }) => {
   const setConversation = useConversation((state) => state.setConversation);
+  const setActiveGroup = useGroup((state) => state.setActiveGroup);
   const startingConversation = useConversation(
     (state) => state.startingConversation,
   );
@@ -30,6 +32,7 @@ const UserListCard = ({ user }: { user: User }) => {
       }
       setConversation(result.data as conversation);
       setShowUsers(false);
+      setActiveGroup(null);
       toast.add({ type: "success", description: "Conversation started" });
     } finally {
       setStartingConversation(null);

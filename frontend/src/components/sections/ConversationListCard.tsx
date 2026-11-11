@@ -5,6 +5,7 @@ import ReusableImage from "../common/ReusableImage";
 import { formatDateTime } from "@/utils/date";
 import { conversation } from "@/types/conversation";
 import useConversation from "@/store/useConversation";
+import useGroup from "@/store/useGroup";
 
 interface ConversationListCardProps {
   conv: conversation;
@@ -16,6 +17,7 @@ export function ConversationListCard({
   active,
 }: ConversationListCardProps) {
   const setConversation = useConversation((state) => state.setConversation);
+  const setActiveGroup = useGroup((state) => state.setActiveGroup);
 
   return (
     <div
@@ -25,7 +27,10 @@ export function ConversationListCard({
         "flex cursor-default items-center gap-3 rounded-2xl p-2.5 transition-colors",
         active ? "bg-accent text-accent-foreground" : "hover:bg-muted/70",
       )}
-      onClick={() => setConversation(conv)}
+      onClick={() => {
+        setConversation(conv);
+        setActiveGroup(null);
+      }}
     >
       <ReusableImage
         avatar={conv.receiver.avatar}

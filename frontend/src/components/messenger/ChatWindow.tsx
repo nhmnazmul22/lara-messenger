@@ -4,10 +4,14 @@ import { ChatHeader } from "@/components/messenger/ChatHeader";
 import { Composer } from "@/components/messenger/Composer";
 import { Messages } from "@/components/messenger/Messages";
 import useConversation from "@/store/useConversation";
+import useGroup from "@/store/useGroup";
 import { Error } from "@/components/common/error";
 import { useEffect } from "react";
 import { toast } from "../ui/toast";
-import { getMessagesByConversation } from "@/services/message";
+import {
+  getMessagesByConversation,
+  getMessagesByGroup,
+} from "@/services/message";
 import { Message } from "@/types/message";
 import { ChatWindowSkeleton } from "../skeleton/ChatWindowSkeleton";
 
@@ -18,14 +22,24 @@ export function ChatWindow() {
   const setLoadingMessages = useConversation(
     (state) => state.setLoadingMessages,
   );
-  const fetchMessages = async (conversationId: number) => {
+  const activeGroup = useGroup((state) => state.activeGroup);
+  const groupsLoading = useGroup((state) => state.groupsLoading);
+
+  const fetchMessages = async (id: number) => {
     try {
       setLoadingMessages(true);
-      const result = await getMessagesByConversation(conversationId);
-      if (!result.success) {
+      let result = null;
+
+      if (activeGroup) {
+        result = await getMessagesByGroup(id);
+      } else {
+        result = await getMessagesByConversation(id);
+      }
+
+      if (!result || !result.success) {
         toast.add({
           type: "error",
-          description: result.message ?? "Conversation start failed",
+          description: result?.message ?? "Conversation start failed",
         });
         return;
       }
@@ -36,17 +50,21 @@ export function ChatWindow() {
   };
 
   useEffect(() => {
-    if (conversation?.id) {
+    if (activeGroup?.id && !conversation) {
+      fetchMessages(activeGroup.id);
+    }
+
+    if (conversation?.id && !activeGroup) {
       fetchMessages(conversation.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [conversation?.id]);
+  }, [conversation?.id, activeGroup?.id]);
 
-  if (loading) {
+  if (loading || groupsLoading) {
     return <ChatWindowSkeleton />;
   }
 
-  if (!conversation) {
+  if (!conversation && !activeGroup) {
     return (
       <Error
         title="Conversation not found"
@@ -57,7 +75,7 @@ export function ChatWindow() {
 
   return (
     <div className="flex min-h-0 min-w-0 flex-col">
-      <ChatHeader conversation={conversation} />
+      <ChatHeader conversation={conversation} group={activeGroup} />
       <Messages />
       <Composer />
     </div>

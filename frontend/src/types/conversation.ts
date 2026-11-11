@@ -28,7 +28,7 @@ export interface ConversationStore {
   setError: (error: string | null) => void;
   setSendingMessage: (sendingMessage: boolean) => void;
 
-  setConversation: (conversation: conversation) => void;
+  setConversation: (conversation: conversation | null) => void;
   setMessages: (messages: Message[]) => void;
   appendMessage: (message: Message) => void;
   setConversations: (conversations: conversation[]) => void;

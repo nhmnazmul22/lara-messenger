@@ -1,6 +1,7 @@
 import ReusableImage from "@/components/common/ReusableImage";
 import { Group } from "@/types/group";
 import useGroup from "@/store/useGroup";
+import useConversation from "@/store/useConversation";
 
 interface GroupListCardProps {
   group: Group;
@@ -8,11 +9,15 @@ interface GroupListCardProps {
 
 export default function GroupListCard({ group }: GroupListCardProps) {
   const setActiveGroup = useGroup((state) => state.setActiveGroup);
+  const setConversation = useConversation((state) => state.setConversation);
 
   return (
     <div
       className="flex cursor-default items-center gap-3 rounded-2xl p-2.5 transition-colors hover:bg-muted/70 min-w-0"
-      onClick={() => setActiveGroup(group)}
+      onClick={() => {
+        setActiveGroup(group);
+        setConversation(null);
+      }}
     >
       <div className="shrink-0">
         <ReusableImage
